@@ -559,23 +559,43 @@ Read these for exact prop shapes, JSX structure, and inline-style values. Feel f
 Stack: Next.js 14, TypeScript, Tailwind CSS, Supabase
 Supabase URL: https://nssihkcwdrqsjbafanna.supabase.co
 Live URL: https://belta-website-sigma.vercel.app
+GitHub: https://github.com/rawad-fakhreddine/Belta-Website
+
+### Deployment
+- Hosted on Vercel, auto-deploys on every git push to main
+- Root directory set to `belta-website`
 
 ### Completed:
 - All frontend components and public pages
+- Full mobile responsive layout (hamburger nav, 2-col product grid, stacked footer)
 - Auth pages (login, register) with name, phone, address, city, newsletter opt-in
-- Admin layout with sidebar (Overview, Products, Subscribers)
+- Admin layout with dark sidebar (Overview, Products, Subscribers)
 - Admin products page (list, add, edit, delete, active toggle)
 - Admin subscribers page
-- Supabase connected with RLS
-- Deployed on Vercel (auto-deploys on git push)
+- Supabase connected with RLS policies
+- Owner role assigned for rawad.fakhreddine2003@gmail.com
+- proxy.ts protecting /admin routes
 
 ### Database tables:
 - `products` — id, name, name_ar, material, material_ar, price, badge, active, created_at
 - `newsletter_subscribers` — id, name, email, phone, address, city, subscribed_at
-- `user_roles` — id, role
+- `user_roles` — id (references auth.users), role
+
+### Mobile breakpoints:
+- Mobile: < 768px
+- Tablet: 768px–1024px
+- Desktop: > 1024px
+
+### Mobile rules:
+- Navbar: hamburger left, wordmark center, search+cart right
+- Product grid: 2 col mobile, 2 col tablet, 4 col desktop
+- Hero: text first, photo below, secondary photo hidden on mobile
+- Hero photo max-height 380px on mobile
+- Product card: aspect-ratio 3/4, overflow-hidden, toggle 9px on mobile
+- Footer: single column centered
+- Min touch target: 44×44px (.belta-touch class)
 
 ### Next tasks:
-- Owner role assigned in Supabase
 - Resend email setup for campaigns
 - Email campaign sender in admin dashboard
 - WhatsApp buttons on product cards

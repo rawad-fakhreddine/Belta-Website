@@ -23,6 +23,7 @@ export default function AboutPage() {
           <div className="belta-two-col">
             {/* ── Photo placeholder ───────────────────────────────────── */}
             <div
+              className="belta-about-photo"
               style={{
                 width: "100%",
                 aspectRatio: "4 / 5",

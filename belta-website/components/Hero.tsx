@@ -107,6 +107,7 @@ export default function Hero({ lang = "en", onShop }: HeroProps) {
         >
           {/* Primary: 4/5 with toggle overlay */}
           <div
+            className="belta-hero-photo-primary"
             style={{
               position: "relative",
               width: "100%",
@@ -123,6 +124,7 @@ export default function Hero({ lang = "en", onShop }: HeroProps) {
 
           {/* Secondary: 16/9 showing opposite mode */}
           <div
+            className="belta-hero-photo-secondary"
             style={{
               width: "100%",
               aspectRatio: "16 / 9",

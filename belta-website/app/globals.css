@@ -348,8 +348,8 @@ a:hover {
   .belta-hero-btn      { width: 100% !important; text-align: center !important; }
 
   /* Grids */
-  .belta-product-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
-  .belta-shop-grid    { grid-template-columns: 1fr !important; gap: 16px !important; }
+  .belta-product-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
+  .belta-shop-grid    { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
   .belta-ig-grid      { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
   .belta-two-col      { grid-template-columns: 1fr !important; gap: 36px !important; }
   .belta-contact-two-col { grid-template-columns: 1fr !important; gap: 40px !important; }
@@ -396,9 +396,21 @@ a:hover {
   .belta-shop-h1 { font-size: 40px !important; }
 
   /* Product card */
-  .belta-product-card       { max-width: 85vw !important; margin-inline: auto !important; }
-  .belta-product-card-image { aspect-ratio: 3 / 4 !important; }
+  .belta-product-card        { overflow: hidden !important; }
+  .belta-product-card-image  { aspect-ratio: 3 / 4 !important; }
   .belta-skeleton-card-image { aspect-ratio: 3 / 4 !important; }
+  .belta-toggle-card-wrapper button { font-size: 9px !important; padding: 3px 8px !important; letter-spacing: 0.1em !important; }
+  .belta-card-info     { padding: 10px 2px 0 !important; }
+  .belta-card-name     { font-size: 18px !important; }
+  .belta-card-material { font-size: 11px !important; }
+  .belta-card-price    { font-size: 14px !important; }
+
+  /* Hero photos */
+  .belta-hero-photo-primary   { max-height: 380px !important; overflow: hidden !important; }
+  .belta-hero-photo-secondary { display: none !important; }
+
+  /* About photo */
+  .belta-about-photo { max-height: 320px !important; overflow: hidden !important; }
 }
 
 /* ─── Tablet (768px – 1023px) ────────────────────────────────────────────── */

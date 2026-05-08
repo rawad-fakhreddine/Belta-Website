@@ -112,6 +112,7 @@ export default function ProductCard({ product, onOpen, lang = "en" }: ProductCar
 
           {/* Toggle */}
           <div
+            className="belta-toggle-card-wrapper"
             style={{ pointerEvents: "auto", flexShrink: 0 }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -127,6 +128,7 @@ export default function ProductCard({ product, onOpen, lang = "en" }: ProductCar
 
       {/* ── Card info ──────────────────────────────────────────────────── */}
       <div
+        className="belta-card-info"
         style={{
           padding: "16px 4px 0",
           display: "flex",
@@ -135,6 +137,7 @@ export default function ProductCard({ product, onOpen, lang = "en" }: ProductCar
         }}
       >
         <p
+          className="belta-card-name"
           style={{
             fontFamily: "var(--font-display)",
             fontSize: "24px",
@@ -147,6 +150,7 @@ export default function ProductCard({ product, onOpen, lang = "en" }: ProductCar
           {product.name}
         </p>
         <p
+          className="belta-card-material"
           style={{
             fontFamily: "var(--font-body)",
             fontSize: "13px",
@@ -159,6 +163,7 @@ export default function ProductCard({ product, onOpen, lang = "en" }: ProductCar
           {product.material}
         </p>
         <p
+          className="belta-card-price"
           style={{
             fontFamily: "var(--font-display)",
             fontSize: "18px",
