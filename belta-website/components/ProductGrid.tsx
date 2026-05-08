@@ -179,6 +179,7 @@ function SkeletonCard() {
   return (
     <div>
       <div
+        className="belta-skeleton-card-image"
         style={{
           width: "100%",
           aspectRatio: "4 / 5",

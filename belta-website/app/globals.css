@@ -340,8 +340,8 @@ a:hover {
     padding: 28px 20px 48px !important;
     gap: 28px !important;
   }
-  .belta-hero-text   { order: 2 !important; }
-  .belta-hero-photos { order: 1 !important; }
+  .belta-hero-text   { order: 1 !important; }
+  .belta-hero-photos { order: 2 !important; }
   .belta-hero-headline { font-size: 38px !important; }
   .belta-hero-lead     { font-size: 16px !important; max-width: 100% !important; }
   .belta-hero-buttons  { flex-direction: column !important; }
@@ -394,6 +394,11 @@ a:hover {
 
   /* Shop */
   .belta-shop-h1 { font-size: 40px !important; }
+
+  /* Product card */
+  .belta-product-card       { max-width: 85vw !important; margin-inline: auto !important; }
+  .belta-product-card-image { aspect-ratio: 3 / 4 !important; }
+  .belta-skeleton-card-image { aspect-ratio: 3 / 4 !important; }
 }
 
 /* ─── Tablet (768px – 1023px) ────────────────────────────────────────────── */

@@ -50,6 +50,7 @@ export default function ProductCard({ product, onOpen, lang = "en" }: ProductCar
       onClick={onOpen}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+      className="belta-product-card"
       style={{
         cursor: onOpen ? "pointer" : "default",
         direction: isRtl ? "rtl" : "ltr",
@@ -57,6 +58,7 @@ export default function ProductCard({ product, onOpen, lang = "en" }: ProductCar
     >
       {/* ── Image area ─────────────────────────────────────────────────── */}
       <div
+        className="belta-product-card-image"
         style={{
           position: "relative",
           width: "100%",
