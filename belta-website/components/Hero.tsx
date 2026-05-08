@@ -18,31 +18,15 @@ export default function Hero({ lang = "en", onShop }: HeroProps) {
   const isRtl = lang === "ar";
 
   return (
-    <section
-      style={{
-        background: "var(--bg)",
-        width: "100%",
-      }}
-    >
+    <section style={{ background: "var(--bg)", width: "100%" }}>
       <div
-        style={{
-          maxWidth: "var(--container)",
-          margin: "0 auto",
-          padding: "64px 32px 96px",
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: "56px",
-          alignItems: "center",
-          direction: isRtl ? "rtl" : "ltr",
-        }}
+        className="belta-hero-inner"
+        style={{ direction: isRtl ? "rtl" : "ltr", maxWidth: "var(--container)", margin: "0 auto" }}
       >
-        {/* ── Left: text content ────────────────────────────────────────── */}
+        {/* ── Text content ──────────────────────────────────────────────── */}
         <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "28px",
-          }}
+          className="belta-hero-text"
+          style={{ display: "flex", flexDirection: "column", gap: "28px" }}
         >
           {/* Eyebrow */}
           <span
@@ -61,6 +45,7 @@ export default function Hero({ lang = "en", onShop }: HeroProps) {
 
           {/* Headline */}
           <h1
+            className="belta-hero-headline"
             style={{
               fontFamily: "var(--font-display)",
               fontSize: "var(--fs-h1)",
@@ -74,32 +59,19 @@ export default function Hero({ lang = "en", onShop }: HeroProps) {
             {lang === "en" ? (
               <>
                 A scarf for the long{" "}
-                <em
-                  style={{
-                    fontStyle: "italic",
-                    color: "var(--brand)",
-                  }}
-                >
-                  afternoons
-                </em>
+                <em style={{ fontStyle: "italic", color: "var(--brand)" }}>afternoons</em>
               </>
             ) : (
               <>
                 وشاح لأجمل{" "}
-                <em
-                  style={{
-                    fontStyle: "italic",
-                    color: "var(--brand)",
-                  }}
-                >
-                  اللحظات
-                </em>
+                <em style={{ fontStyle: "italic", color: "var(--brand)" }}>اللحظات</em>
               </>
             )}
           </h1>
 
           {/* Lead paragraph */}
           <p
+            className="belta-hero-lead"
             style={{
               fontFamily: "var(--font-body)",
               fontSize: "18px",
@@ -116,29 +88,22 @@ export default function Hero({ lang = "en", onShop }: HeroProps) {
 
           {/* Buttons */}
           <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "16px",
-              flexWrap: "wrap",
-            }}
+            className="belta-hero-buttons"
+            style={{ display: "flex", alignItems: "center", gap: "16px", flexWrap: "wrap" }}
           >
-            <PrimaryButton onClick={onShop}>
+            <PrimaryButton onClick={onShop} fullWidthClass>
               {lang === "en" ? "Shop the season" : "تسوّقي الموسم"}
             </PrimaryButton>
-            <GhostButton>
+            <GhostButton fullWidthClass>
               {lang === "en" ? "From the atelier →" : "← من المشغل"}
             </GhostButton>
           </div>
         </div>
 
-        {/* ── Right: photo zones ────────────────────────────────────────── */}
+        {/* ── Photo zones ───────────────────────────────────────────────── */}
         <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "16px",
-          }}
+          className="belta-hero-photos"
+          style={{ display: "flex", flexDirection: "column", gap: "16px" }}
         >
           {/* Primary: 4/5 with toggle overlay */}
           <div
@@ -151,18 +116,8 @@ export default function Hero({ lang = "en", onShop }: HeroProps) {
             }}
           >
             <PhotoZone mode={photoMode} kind="hero" />
-            <div
-              style={{
-                position: "absolute",
-                top: "14px",
-                insetInlineEnd: "14px",
-              }}
-            >
-              <StyledProductToggle
-                value={photoMode}
-                onChange={setPhotoMode}
-                variant="on-image"
-              />
+            <div style={{ position: "absolute", top: "14px", insetInlineEnd: "14px" }}>
+              <StyledProductToggle value={photoMode} onChange={setPhotoMode} variant="on-image" />
             </div>
           </div>
 
@@ -188,9 +143,11 @@ export default function Hero({ lang = "en", onShop }: HeroProps) {
 function PrimaryButton({
   children,
   onClick,
+  fullWidthClass,
 }: {
   children: React.ReactNode;
   onClick?: () => void;
+  fullWidthClass?: boolean;
 }) {
   const [hovered, setHovered] = useState(false);
 
@@ -199,6 +156,7 @@ function PrimaryButton({
       onClick={onClick}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+      className={fullWidthClass ? "belta-hero-btn" : ""}
       style={{
         fontFamily: "var(--font-body)",
         fontSize: "15px",
@@ -212,7 +170,7 @@ function PrimaryButton({
         cursor: "pointer",
         transition: "background 280ms var(--ease-out)",
         lineHeight: 1,
-        whiteSpace: "nowrap",
+        minHeight: "44px",
       }}
     >
       {children}
@@ -223,9 +181,11 @@ function PrimaryButton({
 function GhostButton({
   children,
   onClick,
+  fullWidthClass,
 }: {
   children: React.ReactNode;
   onClick?: () => void;
+  fullWidthClass?: boolean;
 }) {
   const [hovered, setHovered] = useState(false);
 
@@ -234,6 +194,7 @@ function GhostButton({
       onClick={onClick}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+      className={fullWidthClass ? "belta-hero-btn" : ""}
       style={{
         fontFamily: "var(--font-body)",
         fontSize: "15px",
@@ -249,7 +210,7 @@ function GhostButton({
         textDecoration: hovered ? "underline" : "none",
         textUnderlineOffset: "3px",
         lineHeight: 1,
-        whiteSpace: "nowrap",
+        minHeight: "44px",
       }}
     >
       {children}

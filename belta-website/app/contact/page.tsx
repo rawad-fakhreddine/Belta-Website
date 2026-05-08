@@ -6,8 +6,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 export default function ContactPage() {
-  const [lang, setLang] = useState<"en" | "ar">("en");
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [lang, setLang]         = useState<"en" | "ar">("en");
+  const [form, setForm]         = useState({ name: "", email: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
   const isRtl = lang === "ar";
 
@@ -22,21 +22,14 @@ export default function ContactPage() {
       <Navbar lang={lang} onLangChange={setLang} />
 
       <main
-        style={{
-          background: "var(--bg)",
-          minHeight: "70vh",
-          direction: isRtl ? "rtl" : "ltr",
-        }}
+        style={{ background: "var(--bg)", minHeight: "70vh", direction: isRtl ? "rtl" : "ltr" }}
       >
         <div
-          style={{
-            maxWidth: "var(--container)",
-            margin: "0 auto",
-            padding: "64px 32px 96px",
-          }}
+          className="belta-page-pad"
+          style={{ maxWidth: "var(--container)", margin: "0 auto" }}
         >
           {/* ── Page heading ─────────────────────────────────────────────── */}
-          <div style={{ marginBottom: "56px" }}>
+          <div style={{ marginBottom: "48px" }}>
             <span
               style={{
                 display: "block",
@@ -68,22 +61,9 @@ export default function ContactPage() {
           </div>
 
           {/* ── Two-column layout ────────────────────────────────────────── */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: "80px",
-              alignItems: "start",
-            }}
-          >
-            {/* ── Left: contact info ──────────────────────────────────── */}
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "32px",
-              }}
-            >
+          <div className="belta-contact-two-col">
+            {/* ── Contact info ────────────────────────────────────────── */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
               <ContactItem
                 label={lang === "en" ? "Instagram" : "إنستغرام"}
                 value="@belta.scarfs"
@@ -113,12 +93,7 @@ export default function ContactPage() {
                 href="mailto:hello@belta.com"
               />
 
-              <div
-                style={{
-                  paddingTop: "24px",
-                  borderTop: "1px solid var(--border)",
-                }}
-              >
+              <div style={{ paddingTop: "24px", borderTop: "1px solid var(--border)" }}>
                 <p
                   style={{
                     fontFamily: "var(--font-body)",
@@ -135,7 +110,7 @@ export default function ContactPage() {
               </div>
             </div>
 
-            {/* ── Right: contact form ─────────────────────────────────── */}
+            {/* ── Contact form ─────────────────────────────────────────── */}
             <div>
               {submitted ? (
                 <div
@@ -147,24 +122,10 @@ export default function ContactPage() {
                     textAlign: "center",
                   }}
                 >
-                  <p
-                    style={{
-                      fontFamily: "var(--font-display)",
-                      fontSize: "var(--fs-h3)",
-                      color: "var(--fg)",
-                      margin: "0 0 12px",
-                    }}
-                  >
+                  <p style={{ fontFamily: "var(--font-display)", fontSize: "var(--fs-h3)", color: "var(--fg)", margin: "0 0 12px" }}>
                     {lang === "en" ? "Message sent" : "تم إرسال رسالتك"}
                   </p>
-                  <p
-                    style={{
-                      fontFamily: "var(--font-body)",
-                      fontSize: "var(--fs-body)",
-                      color: "var(--fg-muted)",
-                      margin: 0,
-                    }}
-                  >
+                  <p style={{ fontFamily: "var(--font-body)", fontSize: "var(--fs-body)", color: "var(--fg-muted)", margin: 0 }}>
                     {lang === "en"
                       ? "Thank you — we'll be in touch soon."
                       : "شكراً لك — سنتواصل معك قريباً."}
@@ -193,11 +154,7 @@ export default function ContactPage() {
                   />
                   <TextareaField
                     label={lang === "en" ? "Message" : "الرسالة"}
-                    placeholder={
-                      lang === "en"
-                        ? "Tell us what's on your mind…"
-                        : "أخبرينا ما الذي يدور في ذهنك…"
-                    }
+                    placeholder={lang === "en" ? "Tell us what's on your mind…" : "أخبرينا ما الذي يدور في ذهنك…"}
                     value={form.message}
                     onChange={(v) => setForm((f) => ({ ...f, message: v }))}
                     required
@@ -217,17 +174,8 @@ export default function ContactPage() {
 
 /* ─── Sub-components ──────────────────────────────────────────────────────── */
 
-function ContactItem({
-  label,
-  value,
-  href,
-}: {
-  label: string;
-  value: string;
-  href: string;
-}) {
+function ContactItem({ label, value, href }: { label: string; value: string; href: string }) {
   const [hovered, setHovered] = useState(false);
-
   return (
     <div>
       <p
@@ -264,7 +212,6 @@ function ContactItem({
 
 function WhatsAppButton({ lang }: { lang: "en" | "ar" }) {
   const [hovered, setHovered] = useState(false);
-
   return (
     <a
       href="https://wa.me/"
@@ -287,22 +234,12 @@ function WhatsAppButton({ lang }: { lang: "en" | "ar" }) {
         color: hovered ? "var(--fg-on-dark)" : "var(--fg)",
         textDecoration: "none",
         cursor: "pointer",
-        transition:
-          "background 280ms var(--ease-out), color 280ms var(--ease-out), border-color 280ms var(--ease-out)",
+        transition: "background 280ms var(--ease-out), color 280ms var(--ease-out)",
         lineHeight: 1,
+        minHeight: "44px",
       }}
     >
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden="true"
-      >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
       </svg>
       {lang === "en" ? "Message on WhatsApp" : "راسلينا على واتساب"}
@@ -310,34 +247,14 @@ function WhatsAppButton({ lang }: { lang: "en" | "ar" }) {
   );
 }
 
-function Field({
-  label,
-  type,
-  placeholder,
-  value,
-  onChange,
-  required,
-}: {
-  label: string;
-  type: string;
-  placeholder: string;
-  value: string;
-  onChange: (v: string) => void;
-  required?: boolean;
+function Field({ label, type, placeholder, value, onChange, required }: {
+  label: string; type: string; placeholder: string; value: string;
+  onChange: (v: string) => void; required?: boolean;
 }) {
   const [focused, setFocused] = useState(false);
-
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-      <label
-        style={{
-          fontFamily: "var(--font-body)",
-          fontSize: "12px",
-          fontWeight: 500,
-          color: "var(--fg-muted)",
-          letterSpacing: "0.02em",
-        }}
-      >
+      <label style={{ fontFamily: "var(--font-body)", fontSize: "12px", fontWeight: 500, color: "var(--fg-muted)", letterSpacing: "0.02em" }}>
         {label}
       </label>
       <input
@@ -351,20 +268,15 @@ function Field({
         style={{
           width: "100%",
           padding: "11px 14px",
-          border: focused
-            ? "1px solid var(--brand)"
-            : "1px solid var(--border-strong)",
+          border: focused ? "1px solid var(--brand)" : "1px solid var(--border-strong)",
           borderRadius: "var(--radius-md)",
           background: "var(--bg-raised)",
           fontFamily: "var(--font-body)",
-          fontSize: "14px",
+          fontSize: "16px",
           color: "var(--fg)",
           outline: "none",
-          boxShadow: focused
-            ? "0 0 0 3px rgba(139,69,19,0.15)"
-            : "none",
-          transition:
-            "border-color 280ms var(--ease-out), box-shadow 280ms var(--ease-out)",
+          boxShadow: focused ? "0 0 0 3px rgba(139,69,19,0.15)" : "none",
+          transition: "border-color 280ms var(--ease-out), box-shadow 280ms var(--ease-out)",
           boxSizing: "border-box",
         }}
       />
@@ -372,32 +284,14 @@ function Field({
   );
 }
 
-function TextareaField({
-  label,
-  placeholder,
-  value,
-  onChange,
-  required,
-}: {
-  label: string;
-  placeholder: string;
-  value: string;
-  onChange: (v: string) => void;
-  required?: boolean;
+function TextareaField({ label, placeholder, value, onChange, required }: {
+  label: string; placeholder: string; value: string;
+  onChange: (v: string) => void; required?: boolean;
 }) {
   const [focused, setFocused] = useState(false);
-
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-      <label
-        style={{
-          fontFamily: "var(--font-body)",
-          fontSize: "12px",
-          fontWeight: 500,
-          color: "var(--fg-muted)",
-          letterSpacing: "0.02em",
-        }}
-      >
+      <label style={{ fontFamily: "var(--font-body)", fontSize: "12px", fontWeight: 500, color: "var(--fg-muted)", letterSpacing: "0.02em" }}>
         {label}
       </label>
       <textarea
@@ -411,20 +305,15 @@ function TextareaField({
         style={{
           width: "100%",
           padding: "11px 14px",
-          border: focused
-            ? "1px solid var(--brand)"
-            : "1px solid var(--border-strong)",
+          border: focused ? "1px solid var(--brand)" : "1px solid var(--border-strong)",
           borderRadius: "var(--radius-md)",
           background: "var(--bg-raised)",
           fontFamily: "var(--font-body)",
-          fontSize: "14px",
+          fontSize: "16px",
           color: "var(--fg)",
           outline: "none",
-          boxShadow: focused
-            ? "0 0 0 3px rgba(139,69,19,0.15)"
-            : "none",
-          transition:
-            "border-color 280ms var(--ease-out), box-shadow 280ms var(--ease-out)",
+          boxShadow: focused ? "0 0 0 3px rgba(139,69,19,0.15)" : "none",
+          transition: "border-color 280ms var(--ease-out), box-shadow 280ms var(--ease-out)",
           resize: "vertical",
           boxSizing: "border-box",
         }}
@@ -435,7 +324,6 @@ function TextareaField({
 
 function SubmitButton({ lang }: { lang: "en" | "ar" }) {
   const [hovered, setHovered] = useState(false);
-
   return (
     <button
       type="submit"
@@ -455,6 +343,7 @@ function SubmitButton({ lang }: { lang: "en" | "ar" }) {
         cursor: "pointer",
         transition: "background 280ms var(--ease-out)",
         lineHeight: 1,
+        minHeight: "44px",
       }}
     >
       {lang === "en" ? "Send message" : "إرسال الرسالة"}

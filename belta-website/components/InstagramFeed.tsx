@@ -19,11 +19,8 @@ export default function InstagramFeed({ lang = "en" }: InstagramFeedProps) {
   return (
     <section style={{ background: "var(--bg)", width: "100%" }}>
       <div
-        style={{
-          maxWidth: "var(--container)",
-          margin: "0 auto",
-          padding: "32px 32px 96px",
-        }}
+        className="belta-ig-section-pad"
+        style={{ maxWidth: "var(--container)", margin: "0 auto" }}
       >
         {/* ── Centered header ──────────────────────────────────────────── */}
         <div
@@ -65,15 +62,8 @@ export default function InstagramFeed({ lang = "en" }: InstagramFeedProps) {
           </h2>
         </div>
 
-        {/* ── 3×2 tile grid ────────────────────────────────────────────── */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap: "14px",
-            marginBottom: "40px",
-          }}
-        >
+        {/* ── Tile grid (3×2 desktop/tablet, 2×3 mobile) ───────────────── */}
+        <div className="belta-ig-grid" style={{ marginBottom: "40px" }}>
           {TILES.map((tile, i) => (
             <Tile
               key={i}
@@ -125,7 +115,6 @@ function Tile({
         transition: "box-shadow 280ms var(--ease-out)",
       }}
     >
-      {/* Dashed inner frame */}
       <div
         style={{
           position: "absolute",
@@ -135,8 +124,6 @@ function Tile({
           pointerEvents: "none",
         }}
       />
-
-      {/* Centered label */}
       <div
         style={{
           position: "absolute",
@@ -183,6 +170,7 @@ function PrimaryButton({ children }: { children: React.ReactNode }) {
         cursor: "pointer",
         transition: "background 280ms var(--ease-out)",
         lineHeight: 1,
+        minHeight: "44px",
       }}
     >
       {children}

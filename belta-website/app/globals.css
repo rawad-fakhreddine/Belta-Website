@@ -249,3 +249,162 @@ a:hover {
   0%, 100% { opacity: 1; }
   50%       { opacity: 0.45; }
 }
+
+@keyframes belta-drawer-in {
+  from { opacity: 0; transform: translateY(-12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Responsive utilities ───────────────────────────────────────────────── */
+
+/* ── Navbar ── */
+.belta-nav-desktop { display: grid; }
+.belta-nav-mobile  { display: none; }
+.belta-nav-drawer  { display: none; }
+
+/* ── Hero ── */
+.belta-hero-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  padding: 64px 32px 96px;
+  align-items: center;
+}
+.belta-hero-text   { order: 1; }
+.belta-hero-photos { order: 2; }
+
+/* ── Grids ── */
+.belta-product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+}
+.belta-shop-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+}
+.belta-ig-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.belta-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 72px;
+  align-items: center;
+}
+.belta-contact-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+
+/* ── Section padding ── */
+.belta-section-pad     { padding: 64px 32px; }
+.belta-section-pad-lg  { padding: 64px 32px 96px; }
+.belta-ig-section-pad  { padding: 32px 32px 96px; }
+.belta-page-pad        { padding: 64px 32px 96px; }
+.belta-footer-inner    { padding: 48px 32px 0; }
+
+/* ── Admin ── */
+.belta-admin-topbar { display: none; }
+.belta-admin-sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  background: #2C1810;
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+.belta-admin-content-pad { padding: 40px 48px; }
+
+/* ── Touch targets ── */
+.belta-touch { min-width: 44px; min-height: 44px; }
+
+/* ─── Mobile (< 768px) ───────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+
+  /* Navbar */
+  .belta-nav-desktop { display: none !important; }
+  .belta-nav-mobile  { display: flex !important; }
+
+  /* Hero */
+  .belta-hero-inner {
+    grid-template-columns: 1fr !important;
+    padding: 28px 20px 48px !important;
+    gap: 28px !important;
+  }
+  .belta-hero-text   { order: 2 !important; }
+  .belta-hero-photos { order: 1 !important; }
+  .belta-hero-headline { font-size: 38px !important; }
+  .belta-hero-lead     { font-size: 16px !important; max-width: 100% !important; }
+  .belta-hero-buttons  { flex-direction: column !important; }
+  .belta-hero-btn      { width: 100% !important; text-align: center !important; }
+
+  /* Grids */
+  .belta-product-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
+  .belta-shop-grid    { grid-template-columns: 1fr !important; gap: 16px !important; }
+  .belta-ig-grid      { grid-template-columns: repeat(2, 1fr) !important; gap: 10px !important; }
+  .belta-two-col      { grid-template-columns: 1fr !important; gap: 36px !important; }
+  .belta-contact-two-col { grid-template-columns: 1fr !important; gap: 40px !important; }
+
+  /* Section padding */
+  .belta-section-pad     { padding: 36px 20px !important; }
+  .belta-section-pad-lg  { padding: 36px 20px 52px !important; }
+  .belta-ig-section-pad  { padding: 28px 20px 52px !important; }
+  .belta-page-pad        { padding: 36px 20px 52px !important; }
+  .belta-footer-inner    { padding: 36px 20px 0 !important; }
+
+  /* Footer */
+  .belta-footer-grid {
+    grid-template-columns: 1fr !important;
+    text-align: center !important;
+    gap: 36px !important;
+  }
+  .belta-footer-center  { align-items: center !important; flex-direction: row !important; flex-wrap: wrap !important; justify-content: center !important; gap: 20px !important; }
+  .belta-footer-right   { align-items: center !important; }
+  .belta-footer-copy    { flex-direction: column !important; gap: 4px !important; text-align: center !important; }
+
+  /* Admin */
+  .belta-admin-topbar { display: flex !important; }
+  .belta-admin-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    height: 100vh !important;
+    z-index: 60 !important;
+    transform: translateX(-100%) !important;
+    transition: transform 280ms var(--ease-out) !important;
+  }
+  .belta-admin-sidebar-open { transform: translateX(0) !important; }
+  .belta-admin-content-pad  { padding: 20px 16px !important; }
+
+  /* History page */
+  .belta-history-hero     { padding: 40px 20px 32px !important; }
+  .belta-history-h1       { font-size: 36px !important; }
+  .belta-history-sections { padding: 0 20px 52px !important; }
+  .belta-history-h2       { font-size: 26px !important; }
+  .belta-history-body     { font-size: 16px !important; }
+
+  /* Shop */
+  .belta-shop-h1 { font-size: 40px !important; }
+}
+
+/* ─── Tablet (768px – 1023px) ────────────────────────────────────────────── */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .belta-product-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 20px !important; }
+  .belta-shop-grid    { grid-template-columns: repeat(2, 1fr) !important; gap: 20px !important; }
+  .belta-hero-inner   { padding: 48px 28px 72px !important; gap: 36px !important; }
+  .belta-section-pad  { padding: 48px 28px !important; }
+  .belta-section-pad-lg { padding: 48px 28px 72px !important; }
+  .belta-ig-section-pad { padding: 32px 28px 72px !important; }
+  .belta-page-pad     { padding: 48px 28px 72px !important; }
+  .belta-footer-inner { padding: 44px 28px 0 !important; }
+  .belta-admin-content-pad { padding: 32px 28px !important; }
+}

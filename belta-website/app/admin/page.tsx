@@ -26,7 +26,7 @@ export default function AdminOverviewPage() {
   const inactive = total - active;
 
   return (
-    <div style={{ padding: "40px 48px" }}>
+    <div className="belta-admin-content-pad" style={{ padding: "40px 48px" }}>
       {/* Page heading */}
       <div style={{ marginBottom: "36px" }}>
         <p

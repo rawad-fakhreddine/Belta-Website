@@ -17,22 +17,11 @@ export default function AboutPage() {
 
       <main style={{ background: "var(--bg)", minHeight: "70vh" }}>
         <div
-          style={{
-            maxWidth: "var(--container)",
-            margin: "0 auto",
-            padding: "64px 32px 96px",
-            direction: isRtl ? "rtl" : "ltr",
-          }}
+          className="belta-page-pad"
+          style={{ maxWidth: "var(--container)", margin: "0 auto", direction: isRtl ? "rtl" : "ltr" }}
         >
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: "72px",
-              alignItems: "center",
-            }}
-          >
-            {/* ── Left: photo placeholder ─────────────────────────────── */}
+          <div className="belta-two-col">
+            {/* ── Photo placeholder ───────────────────────────────────── */}
             <div
               style={{
                 width: "100%",
@@ -45,14 +34,8 @@ export default function AboutPage() {
               <PhotoZone mode="lifestyle" kind="hero" />
             </div>
 
-            {/* ── Right: brand story ──────────────────────────────────── */}
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "28px",
-              }}
-            >
+            {/* ── Brand story ─────────────────────────────────────────── */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "28px" }}>
               <span
                 style={{
                   fontFamily: "var(--font-body)",

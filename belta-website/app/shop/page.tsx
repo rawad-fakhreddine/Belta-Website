@@ -31,11 +31,8 @@ export default function ShopPage() {
 
       <main style={{ background: "var(--bg)", minHeight: "70vh" }}>
         <div
-          style={{
-            maxWidth: "var(--container)",
-            margin: "0 auto",
-            padding: "64px 32px 96px",
-          }}
+          className="belta-page-pad"
+          style={{ maxWidth: "var(--container)", margin: "0 auto" }}
         >
           {/* ── Page header ─────────────────────────────────────────────── */}
           <div style={{ marginBottom: "40px" }}>
@@ -55,6 +52,7 @@ export default function ShopPage() {
               {lang === "en" ? "The Collection" : "المجموعة"}
             </span>
             <h1
+              className="belta-shop-h1"
               style={{
                 fontFamily: "var(--font-display)",
                 fontSize: "var(--fs-h1)",
@@ -70,14 +68,7 @@ export default function ShopPage() {
           </div>
 
           {/* ── Filter chips ─────────────────────────────────────────────── */}
-          <div
-            style={{
-              display: "flex",
-              gap: "10px",
-              marginBottom: "40px",
-              flexWrap: "wrap",
-            }}
-          >
+          <div style={{ display: "flex", gap: "10px", marginBottom: "40px", flexWrap: "wrap" }}>
             {FILTERS.map((f) => (
               <FilterChip
                 key={f.value}
@@ -89,13 +80,7 @@ export default function ShopPage() {
           </div>
 
           {/* ── Product grid ─────────────────────────────────────────────── */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(4, 1fr)",
-              gap: "28px",
-            }}
-          >
+          <div className="belta-shop-grid">
             {visible.map((product) => (
               <ProductCard key={product.name} product={product} lang={lang} />
             ))}
@@ -139,9 +124,9 @@ function FilterChip({
           : "var(--bg-raised)",
         color: active ? "var(--fg-on-brand)" : "var(--fg)",
         cursor: "pointer",
-        transition:
-          "background 280ms var(--ease-out), color 280ms var(--ease-out), border-color 280ms var(--ease-out)",
+        transition: "background 280ms var(--ease-out), color 280ms var(--ease-out), border-color 280ms var(--ease-out)",
         lineHeight: 1,
+        minHeight: "44px",
       }}
     >
       {label}

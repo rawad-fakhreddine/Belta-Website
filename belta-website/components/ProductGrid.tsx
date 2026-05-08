@@ -53,7 +53,6 @@ export default function ProductGrid({ lang = "en", onOpenProduct }: ProductGridP
       }
 
       if (!data || data.length === 0) {
-        // Table exists but is empty — use static fallback so the page isn't blank
         setProducts(FALLBACK_PRODUCTS);
         setStatus("ok");
         return;
@@ -70,10 +69,10 @@ export default function ProductGrid({ lang = "en", onOpenProduct }: ProductGridP
   return (
     <section style={{ background: "var(--bg)", width: "100%" }}>
       <div
+        className="belta-section-pad-lg"
         style={{
           maxWidth: "var(--container)",
           margin: "0 auto",
-          padding: "64px 32px",
           direction: isRtl ? "rtl" : "ltr",
         }}
       >
@@ -140,14 +139,13 @@ export default function ProductGrid({ lang = "en", onOpenProduct }: ProductGridP
           </Link>
         </div>
 
-        {/* ── Error notice (non-blocking — fallback data shown below) ─── */}
+        {/* ── Error notice ─────────────────────────────────────────────── */}
         {status === "error" && (
           <p
             style={{
               fontFamily: "var(--font-body)",
               fontSize: "var(--fs-small)",
               color: "var(--fg-subtle)",
-              marginBottom: "24px",
               margin: "0 0 24px",
             }}
           >
@@ -157,18 +155,10 @@ export default function ProductGrid({ lang = "en", onOpenProduct }: ProductGridP
           </p>
         )}
 
-        {/* ── Grid ────────────────────────────────────────────────────── */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
-            gap: "28px",
-          }}
-        >
+        {/* ── Grid ─────────────────────────────────────────────────────── */}
+        <div className="belta-product-grid">
           {status === "loading"
-            ? Array.from({ length: 4 }).map((_, i) => (
-                <SkeletonCard key={i} />
-              ))
+            ? Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)
             : products.map((product, i) => (
                 <ProductCard
                   key={product.name}
@@ -198,33 +188,9 @@ function SkeletonCard() {
         }}
       />
       <div style={{ padding: "16px 4px 0", display: "flex", flexDirection: "column", gap: "8px" }}>
-        <div
-          style={{
-            height: "22px",
-            width: "60%",
-            borderRadius: "var(--radius-sm)",
-            background: "var(--belta-cream-deep)",
-            animation: "belta-pulse 1.6s ease-in-out infinite",
-          }}
-        />
-        <div
-          style={{
-            height: "14px",
-            width: "80%",
-            borderRadius: "var(--radius-sm)",
-            background: "var(--belta-cream-deep)",
-            animation: "belta-pulse 1.6s ease-in-out infinite 0.1s",
-          }}
-        />
-        <div
-          style={{
-            height: "16px",
-            width: "30%",
-            borderRadius: "var(--radius-sm)",
-            background: "var(--belta-cream-deep)",
-            animation: "belta-pulse 1.6s ease-in-out infinite 0.2s",
-          }}
-        />
+        <div style={{ height: "22px", width: "60%", borderRadius: "var(--radius-sm)", background: "var(--belta-cream-deep)", animation: "belta-pulse 1.6s ease-in-out infinite" }} />
+        <div style={{ height: "14px", width: "80%", borderRadius: "var(--radius-sm)", background: "var(--belta-cream-deep)", animation: "belta-pulse 1.6s ease-in-out infinite 0.1s" }} />
+        <div style={{ height: "16px", width: "30%", borderRadius: "var(--radius-sm)", background: "var(--belta-cream-deep)", animation: "belta-pulse 1.6s ease-in-out infinite 0.2s" }} />
       </div>
     </div>
   );

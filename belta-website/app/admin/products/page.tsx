@@ -43,7 +43,7 @@ export default function AdminProductsPage() {
   };
 
   return (
-    <div style={{ padding: "40px 48px" }}>
+    <div className="belta-admin-content-pad" style={{ padding: "40px 48px" }}>
       {/* ── Top bar ────────────────────────────────────────────────── */}
       <div
         style={{

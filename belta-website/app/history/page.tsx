@@ -44,7 +44,7 @@ const SECTIONS = {
 
 export default function HistoryPage() {
   const [lang, setLang] = useState<"en" | "ar">("en");
-  const isRtl = lang === "ar";
+  const isRtl    = lang === "ar";
   const sections = SECTIONS[lang];
 
   return (
@@ -53,14 +53,11 @@ export default function HistoryPage() {
       <Navbar lang={lang} onLangChange={setLang} />
 
       <main
-        style={{
-          background: "var(--bg)",
-          minHeight: "70vh",
-          direction: isRtl ? "rtl" : "ltr",
-        }}
+        style={{ background: "var(--bg)", minHeight: "70vh", direction: isRtl ? "rtl" : "ltr" }}
       >
         {/* ── Hero headline ─────────────────────────────────────────────── */}
         <div
+          className="belta-history-hero"
           style={{
             maxWidth: "var(--container-narrow)",
             margin: "0 auto",
@@ -85,6 +82,7 @@ export default function HistoryPage() {
           </span>
 
           <h1
+            className="belta-history-h1"
             style={{
               fontFamily: "var(--font-display)",
               fontSize: "var(--fs-display)",
@@ -98,17 +96,13 @@ export default function HistoryPage() {
             {lang === "en" ? (
               <>
                 Designed with an{" "}
-                <em style={{ fontStyle: "italic", color: "var(--brand)" }}>
-                  interior
-                </em>{" "}
+                <em style={{ fontStyle: "italic", color: "var(--brand)" }}>interior</em>{" "}
                 eye
               </>
             ) : (
               <>
                 مصمَّم بعين{" "}
-                <em style={{ fontStyle: "italic", color: "var(--brand)" }}>
-                  داخلية
-                </em>
+                <em style={{ fontStyle: "italic", color: "var(--brand)" }}>داخلية</em>
               </>
             )}
           </h1>
@@ -116,29 +110,15 @@ export default function HistoryPage() {
 
         {/* ── Three editorial sections ───────────────────────────────────── */}
         <div
-          style={{
-            maxWidth: "var(--container-narrow)",
-            margin: "0 auto",
-            padding: "0 32px 96px",
-          }}
+          className="belta-history-sections"
+          style={{ maxWidth: "var(--container-narrow)", margin: "0 auto", padding: "0 32px 96px" }}
         >
           {sections.map((s, i) => (
             <div key={i}>
               {i > 0 && (
-                <div
-                  style={{
-                    borderTop: "1px solid var(--border)",
-                    margin: "56px 0",
-                  }}
-                />
+                <div style={{ borderTop: "1px solid var(--border)", margin: "48px 0" }} />
               )}
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "16px",
-                }}
-              >
+              <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
                 <span
                   style={{
                     fontFamily: "var(--font-body)",
@@ -153,6 +133,7 @@ export default function HistoryPage() {
                   {s.eyebrow}
                 </span>
                 <h2
+                  className="belta-history-h2"
                   style={{
                     fontFamily: "var(--font-display)",
                     fontSize: "var(--fs-h2)",
@@ -166,6 +147,7 @@ export default function HistoryPage() {
                   {s.heading}
                 </h2>
                 <p
+                  className="belta-history-body"
                   style={{
                     fontFamily: "var(--font-body)",
                     fontSize: "var(--fs-lead)",

@@ -102,7 +102,7 @@ export default function EditProductPage({ params }: { params: Params }) {
   if (notFound || !form) return <NotFound />;
 
   return (
-    <div style={{ padding: "40px 48px", maxWidth: "860px" }}>
+    <div className="belta-admin-content-pad" style={{ padding: "40px 48px", maxWidth: "860px" }}>
       {/* Heading */}
       <div style={{ marginBottom: "36px" }}>
         <p style={eyebrow}>Products</p>
