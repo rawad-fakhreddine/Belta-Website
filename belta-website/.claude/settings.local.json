@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(findstr /i font)",
+      "Bash(dir \"c:\\\\Users\\\\Rawad Fakhredine\\\\Desktop\\\\Belta designs\\\\Belta Website\\\\belta-website\")",
+      "Bash(npm run *)",
+      "Bash(npm install *)"
+    ]
+  }
+}
