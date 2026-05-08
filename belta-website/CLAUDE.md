@@ -573,10 +573,28 @@ Supabase URL: https://nssihkcwdrqsjbafanna.supabase.co
 - `app/about/page.tsx`
 - `app/history/page.tsx`
 - `app/contact/page.tsx`
+- `app/auth/login/page.tsx`
+- `app/auth/register/page.tsx`
+- `app/admin/layout.tsx`
+- `app/admin/page.tsx` (overview + stats)
+- `app/admin/products/page.tsx`
+- `app/admin/products/new/page.tsx`
+- `app/admin/products/[id]/edit/page.tsx`
+- `app/admin/subscribers/page.tsx`
+- `proxy.ts` (route protection)
+
+### Database tables:
+- `products` — id, name, name_ar, material, material_ar, price, badge, active, created_at
+- `newsletter_subscribers` — id, name, email, address, city, subscribed_at
+
+### Register form fields:
+- name, address, city, email, password
+- newsletter opt-in checkbox
 
 ### Next tasks:
-- Visitor sign-in and register pages
-- Admin login page (`app/admin/login/page.tsx`)
-- Admin dashboard (`app/admin/page.tsx`)
-- Middleware to protect `/admin` routes
-- Owner role assignment in Supabase
+- Add phone field to register page and newsletter_subscribers table
+- Deploy to Vercel
+- Set up Resend for email campaigns
+- Build email campaign sender in admin dashboard
+- WhatsApp buttons on product cards
+- Analytics events tracking table and admin analytics page

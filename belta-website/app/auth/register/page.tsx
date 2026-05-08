@@ -11,6 +11,7 @@ export default function RegisterPage() {
   const [name, setName]           = useState("");
   const [email, setEmail]         = useState("");
   const [password, setPassword]   = useState("");
+  const [phone, setPhone]         = useState("");
   const [address, setAddress]     = useState("");
   const [city, setCity]           = useState("");
   const [newsletter, setNewsletter] = useState(false);
@@ -35,6 +36,7 @@ export default function RegisterPage() {
       options: {
         data: {
           full_name: name,
+          phone:     phone   || null,
           address:   address || null,
           city:      city    || null,
         },
@@ -53,6 +55,7 @@ export default function RegisterPage() {
       await supabase.from("newsletter_subscribers").insert({
         name,
         email,
+        phone:   phone   || null,
         address: address || null,
         city:    city    || null,
       });
@@ -179,6 +182,14 @@ export default function RegisterPage() {
                 onChange={setPassword}
                 required
                 autoComplete="new-password"
+              />
+              <AuthField
+                label="Phone number"
+                type="tel"
+                placeholder="+961 XX XXX XXX"
+                value={phone}
+                onChange={setPhone}
+                autoComplete="tel"
               />
               <AuthField
                 label="Address"
