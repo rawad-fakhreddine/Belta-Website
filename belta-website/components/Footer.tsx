@@ -4,11 +4,11 @@ import { useState } from "react";
 import Link from "next/link";
 
 const NAV_LINKS = {
-  en: ["Home", "Shop", "About", "History", "Contact"],
-  ar: ["الرئيسية", "المتجر", "عنّا", "حكايتنا", "تواصلي"],
+  en: ["Home", "Shop", "About", "Contact"],
+  ar: ["الرئيسية", "المتجر", "عنّا", "تواصلي"],
 };
 
-const NAV_HREFS = ["/", "/shop", "/about", "/history", "/contact"];
+const NAV_HREFS = ["/", "/shop", "/about", "/contact"];
 
 interface FooterProps {
   lang?: "en" | "ar";

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import PhotoZone from "@/components/PhotoZone";
 import StyledProductToggle from "@/components/StyledProductToggle";
 
@@ -16,6 +17,7 @@ export default function Hero({ lang = "en", onShop }: HeroProps) {
   const [photoMode, setPhotoMode] = useState<ToggleValue>("lifestyle");
   const secondaryMode: ToggleValue = photoMode === "lifestyle" ? "product" : "lifestyle";
   const isRtl = lang === "ar";
+  const router = useRouter();
 
   return (
     <section style={{ background: "var(--bg)", width: "100%" }}>
@@ -91,10 +93,10 @@ export default function Hero({ lang = "en", onShop }: HeroProps) {
             className="belta-hero-buttons"
             style={{ display: "flex", alignItems: "center", gap: "16px", flexWrap: "wrap" }}
           >
-            <PrimaryButton onClick={onShop} fullWidthClass>
+            <PrimaryButton onClick={() => router.push("/shop")} fullWidthClass>
               {lang === "en" ? "Shop the season" : "تسوّقي الموسم"}
             </PrimaryButton>
-            <GhostButton fullWidthClass>
+            <GhostButton onClick={() => router.push("/shop")} fullWidthClass>
               {lang === "en" ? "From the atelier →" : "← من المشغل"}
             </GhostButton>
           </div>

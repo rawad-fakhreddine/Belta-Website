@@ -12,11 +12,11 @@ import WishlistDropdown from "@/components/WishlistDropdown";
 import CartPanel from "@/components/CartPanel";
 
 const NAV_LINKS = {
-  en: ["Home", "Shop", "About", "History", "Contact"],
-  ar: ["الرئيسية", "المتجر", "عنّا", "حكايتنا", "تواصلي"],
+  en: ["Home", "Shop", "About", "Contact"],
+  ar: ["الرئيسية", "المتجر", "عنّا", "تواصلي"],
 };
 
-const NAV_HREFS = ["/", "/shop", "/about", "/history", "/contact"];
+const NAV_HREFS = ["/", "/shop", "/about", "/contact"];
 
 type PanelId = "search" | "account" | "wishlist" | "cart";
 
@@ -306,98 +306,117 @@ export default function Navbar({
         />
       </nav>
 
-      {/* ── MOBILE full-screen drawer ──────────────────────────────────────── */}
+      {/* ── MOBILE slide-in drawer (left) ─────────────────────────────────── */}
+
+      {/* Backdrop — only rendered when open */}
       {mobileOpen && (
         <div
+          onClick={() => setMobileOpen(false)}
           style={{
             position: "fixed",
             inset: 0,
-            zIndex: 60,
-            background: "#F5EFE6",
+            zIndex: 59,
+            background: "rgba(44,24,16,0.4)",
+          }}
+        />
+      )}
+
+      {/* Drawer — always in DOM so CSS transition works; hidden on desktop via CSS */}
+      <div
+        className="belta-mobile-drawer"
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "280px",
+          height: "100vh",
+          zIndex: 60,
+          background: "#EFE7DA",
+          transform: mobileOpen ? "translateX(0)" : "translateX(-100%)",
+          transition: "transform 280ms var(--ease-out)",
+          flexDirection: "column",
+          padding: "48px",
+          overflowY: "auto",
+          boxShadow: "4px 0 24px rgba(44,24,16,0.12)",
+        }}
+      >
+        {/* Close button — top-right inside drawer */}
+        <button
+          aria-label="Close menu"
+          onClick={() => setMobileOpen(false)}
+          className="belta-touch"
+          style={{
+            position: "absolute",
+            top: "12px",
+            right: "12px",
             display: "flex",
-            flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            animation: "belta-drawer-in 280ms var(--ease-out)",
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            color: "var(--fg)",
+            borderRadius: "var(--radius-md)",
           }}
         >
-          {/* Close button */}
-          <button
-            aria-label="Close menu"
-            onClick={() => setMobileOpen(false)}
-            className="belta-touch"
-            style={{
-              position: "absolute",
-              top: "12px",
-              insetInlineEnd: "16px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              color: "var(--fg)",
-              borderRadius: "var(--radius-md)",
-            }}
-          >
-            <X size={20} strokeWidth={1.5} />
-          </button>
+          <X size={20} strokeWidth={1.5} />
+        </button>
 
-          {/* Nav links */}
-          <nav
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: "32px",
-            }}
-          >
-            {labels.map((label, i) => (
-              <Link
-                key={NAV_HREFS[i]}
-                href={NAV_HREFS[i]}
-                onClick={() => setMobileOpen(false)}
-                style={{
-                  fontFamily: "var(--font-body)",
-                  fontSize: "18px",
-                  fontWeight: pathname === NAV_HREFS[i] ? 500 : 400,
-                  color: pathname === NAV_HREFS[i] ? "var(--brand)" : "var(--fg)",
-                  textDecoration: "none",
-                  letterSpacing: "0.01em",
-                  lineHeight: 1,
-                }}
-              >
-                {label}
-              </Link>
-            ))}
-          </nav>
+        {/* Nav links — centered vertically */}
+        <nav
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "40px",
+            flex: 1,
+            justifyContent: "center",
+          }}
+        >
+          {labels.map((label, i) => (
+            <Link
+              key={NAV_HREFS[i]}
+              href={NAV_HREFS[i]}
+              onClick={() => setMobileOpen(false)}
+              style={{
+                fontFamily: "var(--font-body)",
+                fontSize: "20px",
+                fontWeight: pathname === NAV_HREFS[i] ? 500 : 400,
+                color: pathname === NAV_HREFS[i] ? "var(--brand)" : "#2C1810",
+                textDecoration: "none",
+                letterSpacing: "0.01em",
+                lineHeight: 1,
+              }}
+            >
+              {label}
+            </Link>
+          ))}
+        </nav>
 
-          {/* Lang toggle */}
-          <button
-            onClick={handleLangToggle}
-            aria-label="Toggle language"
-            style={{
-              marginTop: "48px",
-              display: "flex",
-              alignItems: "center",
-              fontFamily: "var(--font-body)",
-              fontSize: "11px",
-              fontWeight: 500,
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              lineHeight: 1,
-              minHeight: "44px",
-            }}
-          >
-            <span style={{ color: lang === "en" ? "var(--brand)" : "var(--fg-muted)" }}>EN</span>
-            <span style={{ color: "var(--fg-muted)", opacity: 0.5, paddingInline: "6px" }}>|</span>
-            <span style={{ color: lang === "ar" ? "var(--brand)" : "var(--fg-muted)" }}>AR</span>
-          </button>
-        </div>
-      )}
+        {/* Lang toggle — bottom of drawer */}
+        <button
+          onClick={handleLangToggle}
+          aria-label="Toggle language"
+          style={{
+            alignSelf: "flex-start",
+            display: "flex",
+            alignItems: "center",
+            fontFamily: "var(--font-body)",
+            fontSize: "11px",
+            fontWeight: 500,
+            letterSpacing: "0.18em",
+            textTransform: "uppercase",
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            lineHeight: 1,
+            minHeight: "44px",
+          }}
+        >
+          <span style={{ color: lang === "en" ? "var(--brand)" : "var(--fg-muted)" }}>EN</span>
+          <span style={{ color: "var(--fg-muted)", opacity: 0.5, paddingInline: "6px" }}>|</span>
+          <span style={{ color: lang === "ar" ? "var(--brand)" : "var(--fg-muted)" }}>AR</span>
+        </button>
+      </div>
 
       {/* Cart slide-over */}
       <CartPanel

@@ -258,9 +258,10 @@ a:hover {
 /* ─── Responsive utilities ───────────────────────────────────────────────── */
 
 /* ── Navbar ── */
-.belta-nav-desktop { display: grid; }
-.belta-nav-mobile  { display: none; }
-.belta-nav-drawer  { display: none; }
+.belta-nav-desktop   { display: grid; }
+.belta-nav-mobile    { display: none; }
+.belta-nav-drawer    { display: none; }
+.belta-mobile-drawer { display: none; }
 
 /* ── Hero ── */
 .belta-hero-inner {
@@ -331,8 +332,9 @@ a:hover {
 @media (max-width: 767px) {
 
   /* Navbar */
-  .belta-nav-desktop { display: none !important; }
-  .belta-nav-mobile  { display: flex !important; }
+  .belta-nav-desktop   { display: none !important; }
+  .belta-nav-mobile    { display: flex !important; }
+  .belta-mobile-drawer { display: flex !important; }
 
   /* Hero */
   .belta-hero-inner {
@@ -410,7 +412,9 @@ a:hover {
   .belta-hero-photo-secondary { display: none !important; }
 
   /* About photo */
-  .belta-about-photo { max-height: 320px !important; overflow: hidden !important; }
+  .belta-about-photo      { max-height: 320px !important; overflow: hidden !important; }
+  .belta-about-hero-text  { padding: 20px 24px !important; }
+  .belta-about-hero-h1    { font-size: 30px !important; }
 }
 
 /* ─── Tablet (768px – 1023px) ────────────────────────────────────────────── */
