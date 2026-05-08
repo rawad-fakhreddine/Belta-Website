@@ -3,13 +3,14 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Home, Package, Mail, Menu, X } from "lucide-react";
+import { Home, Package, Mail, Send, Menu, X } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
 const NAV = [
   { label: "Overview",    href: "/admin",             icon: Home    },
   { label: "Products",    href: "/admin/products",    icon: Package },
   { label: "Subscribers", href: "/admin/subscribers", icon: Mail    },
+  { label: "Campaigns",   href: "/admin/campaigns",   icon: Send    },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
