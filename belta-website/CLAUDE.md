@@ -558,43 +558,26 @@ Read these for exact prop shapes, JSX structure, and inline-style values. Feel f
 
 Stack: Next.js 14, TypeScript, Tailwind CSS, Supabase
 Supabase URL: https://nssihkcwdrqsjbafanna.supabase.co
+Live URL: https://belta-website-sigma.vercel.app
 
-### Completed components:
-- `components/AnnouncementBar.tsx`
-- `components/Navbar.tsx`
-- `components/Hero.tsx`
-- `components/ProductGrid.tsx`
-- `components/ProductCard.tsx`
-- `components/InstagramFeed.tsx`
-- `components/Footer.tsx`
-- `lib/supabase.ts`
-- `app/page.tsx` (homepage)
-- `app/shop/page.tsx`
-- `app/about/page.tsx`
-- `app/history/page.tsx`
-- `app/contact/page.tsx`
-- `app/auth/login/page.tsx`
-- `app/auth/register/page.tsx`
-- `app/admin/layout.tsx`
-- `app/admin/page.tsx` (overview + stats)
-- `app/admin/products/page.tsx`
-- `app/admin/products/new/page.tsx`
-- `app/admin/products/[id]/edit/page.tsx`
-- `app/admin/subscribers/page.tsx`
-- `proxy.ts` (route protection)
+### Completed:
+- All frontend components and public pages
+- Auth pages (login, register) with name, phone, address, city, newsletter opt-in
+- Admin layout with sidebar (Overview, Products, Subscribers)
+- Admin products page (list, add, edit, delete, active toggle)
+- Admin subscribers page
+- Supabase connected with RLS
+- Deployed on Vercel (auto-deploys on git push)
 
 ### Database tables:
 - `products` — id, name, name_ar, material, material_ar, price, badge, active, created_at
-- `newsletter_subscribers` — id, name, email, address, city, subscribed_at
-
-### Register form fields:
-- name, address, city, email, password
-- newsletter opt-in checkbox
+- `newsletter_subscribers` — id, name, email, phone, address, city, subscribed_at
+- `user_roles` — id, role
 
 ### Next tasks:
-- Add phone field to register page and newsletter_subscribers table
-- Deploy to Vercel
-- Set up Resend for email campaigns
-- Build email campaign sender in admin dashboard
+- Owner role assigned in Supabase
+- Resend email setup for campaigns
+- Email campaign sender in admin dashboard
 - WhatsApp buttons on product cards
-- Analytics events tracking table and admin analytics page
+- Analytics events table and admin analytics page
+- Security hardening + admin credentials change
