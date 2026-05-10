@@ -14,18 +14,47 @@ export default function ResetPasswordPage() {
   const [done, setDone]           = useState(false);
   const [error, setError]         = useState<string | null>(null);
   const [sessionReady, setSessionReady] = useState(false);
+  const [linkExpired, setLinkExpired]   = useState(false);
 
-  // The auth callback already exchanged the code for a session before
-  // redirecting here. Verify we actually have a user.
   useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      if (!user) {
-        router.replace("/auth/forgot-password?error=Link+expired+or+already+used");
-      } else {
+    let resolved = false;
+
+    const resolve = () => {
+      if (!resolved) {
+        resolved = true;
         setSessionReady(true);
       }
+    };
+
+    // A: hash-based implicit flow (dashboard emails) or PKCE via onAuthStateChange
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "PASSWORD_RECOVERY" || event === "SIGNED_IN") resolve();
     });
-  }, [router]);
+
+    // B: PKCE flow — code arrives as a query param, exchange it browser-side
+    const code = new URLSearchParams(window.location.search).get("code");
+    if (code) {
+      supabase.auth.exchangeCodeForSession(code).then(({ error }) => {
+        if (!error) resolve();
+      });
+    }
+
+    // C: server callback already set the session before redirecting here
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user) resolve();
+    });
+
+    // If none of the above resolved after 5 s, the link is expired or already used
+    const timeout = setTimeout(() => {
+      if (!resolved) setLinkExpired(true);
+    }, 5000);
+
+    return () => {
+      subscription.unsubscribe();
+      clearTimeout(timeout);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,13 +92,50 @@ export default function ResetPasswordPage() {
     return (
       <div
         style={{
-          minHeight: "100vh", display: "flex", alignItems: "center",
-          justifyContent: "center", background: "var(--bg)",
+          minHeight: "100vh", display: "flex", flexDirection: "column",
+          alignItems: "center", justifyContent: "center",
+          background: "var(--bg)", padding: "32px 16px",
         }}
       >
-        <p style={{ fontFamily: "var(--font-body)", color: "var(--fg-muted)", fontSize: "14px" }}>
-          Verifying your reset link…
-        </p>
+        <div
+          style={{
+            width: "100%", maxWidth: "440px", background: "var(--surface)",
+            border: "1px solid var(--border)", borderRadius: "var(--radius-xl)",
+            boxShadow: "var(--shadow-lg)", padding: "48px 40px", textAlign: "center",
+          }}
+        >
+          <Link
+            href="/"
+            style={{
+              fontFamily: "var(--font-display)", fontSize: "34px", fontWeight: 500,
+              color: "var(--belta-terracotta)", letterSpacing: "-0.01em",
+              textDecoration: "none", lineHeight: 1, display: "block", marginBottom: "32px",
+            }}
+          >
+            Beltà
+          </Link>
+
+          {linkExpired ? (
+            <>
+              <h1 style={{ fontFamily: "var(--font-display)", fontSize: "28px", fontWeight: 600, color: "var(--fg)", margin: "0 0 12px", lineHeight: "var(--lh-snug)" }}>
+                Link expired
+              </h1>
+              <p style={{ fontFamily: "var(--font-body)", fontSize: "14px", color: "var(--fg-muted)", margin: "0 0 24px", lineHeight: "var(--lh-relaxed)" }}>
+                This reset link has already been used or has expired. Request a new one.
+              </p>
+              <Link
+                href="/auth/forgot-password"
+                style={{ fontFamily: "var(--font-body)", fontSize: "14px", color: "var(--brand)", textDecoration: "underline", textUnderlineOffset: "3px" }}
+              >
+                Request a new reset link
+              </Link>
+            </>
+          ) : (
+            <p style={{ fontFamily: "var(--font-body)", color: "var(--fg-muted)", fontSize: "14px" }}>
+              Verifying your reset link…
+            </p>
+          )}
+        </div>
       </div>
     );
   }
