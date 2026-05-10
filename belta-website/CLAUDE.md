@@ -564,14 +564,17 @@ GitHub: https://github.com/rawad-fakhreddine/Belta-Website
 ### Deployment
 - Hosted on Vercel, auto-deploys on every git push to main
 - Root directory set to `belta-website`
+- To verify the site is live: fetch https://belta-website-sigma.vercel.app
 
 ### Completed:
 - All frontend components and public pages
-- Full mobile responsive layout (hamburger nav, 2-col product grid, stacked footer)
+- Full mobile responsive layout (2-col product grid, slide-in drawer from left, stacked footer)
 - Auth pages (login, register) with name, phone, address, city, newsletter opt-in
-- Admin layout with dark sidebar (Overview, Products, Subscribers)
+- Admin layout with dark sidebar (Overview, Products, Subscribers, Campaigns)
 - Admin products page (list, add, edit, delete, active toggle)
 - Admin subscribers page
+- Admin campaigns page with Resend email integration
+- API route: POST /api/send-campaign (owner-only, batches of 100)
 - Supabase connected with RLS policies
 - Owner role assigned for rawad.fakhreddine2003@gmail.com
 - proxy.ts protecting /admin routes
@@ -581,23 +584,34 @@ GitHub: https://github.com/rawad-fakhreddine/Belta-Website
 - `newsletter_subscribers` — id, name, email, phone, address, city, subscribed_at
 - `user_roles` — id (references auth.users), role
 
+### Email
+- Provider: Resend (free tier)
+- Currently sends from: onboarding@resend.dev
+- After custom domain verified: update `from:` in app/api/send-campaign/route.ts
+
 ### Mobile breakpoints:
 - Mobile: < 768px
 - Tablet: 768px–1024px
 - Desktop: > 1024px
 
 ### Mobile rules:
-- Navbar: hamburger left, wordmark center, search+cart right
+- Navbar: hamburger left → slide-in drawer from left (280px, #EFE7DA bg)
 - Product grid: 2 col mobile, 2 col tablet, 4 col desktop
-- Hero: text first, photo below, secondary photo hidden on mobile
-- Hero photo max-height 380px on mobile
+- Hero: text first, photo below, secondary photo hidden on mobile, max-h-[380px]
 - Product card: aspect-ratio 3/4, overflow-hidden, toggle 9px on mobile
 - Footer: single column centered
 - Min touch target: 44×44px (.belta-touch class)
 
-### Next tasks:
-- Resend email setup for campaigns
-- Email campaign sender in admin dashboard
-- WhatsApp buttons on product cards
-- Analytics events table and admin analytics page
+### Remaining tasks:
+- WhatsApp buttons on product cards (ask + reserve, wa.me links)
+- Analytics events table in Supabase + admin analytics page
 - Security hardening + admin credentials change
+- Mobile design polish
+- Custom domain setup + update Resend sender email
+
+### How to work on this project:
+- Always read this file fully before starting any task
+- Always fetch https://belta-website-sigma.vercel.app to verify live state
+- Every change must end with git add . && git commit -m "..." && git push origin main
+- Never invent new colors, fonts, or shadows — use only tokens defined in sections 1–3
+- Use High effort mode for multi-file tasks
