@@ -7,6 +7,9 @@ export async function GET(request: NextRequest) {
   const code = searchParams.get("code");
   const next = searchParams.get("next") ?? "/";
 
+  // Supabase passes type=recovery for password reset links
+  const type = searchParams.get("type");
+
   if (code) {
     const cookieStore = await cookies();
 
@@ -30,6 +33,11 @@ export async function GET(request: NextRequest) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error) {
+      // If this is a password recovery flow, always land on reset-password
+      // regardless of whether the `next` param was preserved in the link
+      if (type === "recovery" || next === "/auth/reset-password") {
+        return NextResponse.redirect(`${origin}/auth/reset-password`);
+      }
       return NextResponse.redirect(`${origin}${next}`);
     }
   }
