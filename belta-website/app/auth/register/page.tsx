@@ -17,7 +17,6 @@ export default function RegisterPage() {
   const [newsletter, setNewsletter] = useState(false);
   const [loading, setLoading]     = useState(false);
   const [error, setError]         = useState<string | null>(null);
-  const [confirmed, setConfirmed] = useState(false);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
@@ -61,8 +60,8 @@ export default function RegisterPage() {
       });
     }
 
-    setConfirmed(true);
     setLoading(false);
+    router.push("/");
   };
 
   return (
@@ -106,37 +105,7 @@ export default function RegisterPage() {
           </Link>
         </div>
 
-        {confirmed ? (
-          <div style={{ textAlign: "center" }}>
-            <h1
-              style={{
-                fontFamily: "var(--font-display)",
-                fontSize: "34px",
-                fontWeight: 600,
-                lineHeight: "var(--lh-snug)",
-                color: "var(--fg)",
-                margin: "0 0 16px",
-              }}
-            >
-              Check your inbox
-            </h1>
-            <p
-              style={{
-                fontFamily: "var(--font-body)",
-                fontSize: "14px",
-                color: "var(--fg-muted)",
-                lineHeight: "var(--lh-relaxed)",
-                margin: "0 0 32px",
-              }}
-            >
-              We sent a confirmation link to{" "}
-              <strong style={{ color: "var(--fg)" }}>{email}</strong>. Click it
-              to activate your account.
-            </p>
-            <GhostLink href="/auth/login">Back to sign in</GhostLink>
-          </div>
-        ) : (
-          <>
+        <>
             <h1
               style={{
                 fontFamily: "var(--font-display)",
@@ -275,7 +244,6 @@ export default function RegisterPage() {
               <GhostLink href="/auth/login">Sign in →</GhostLink>
             </p>
           </>
-        )}
       </div>
     </div>
   );

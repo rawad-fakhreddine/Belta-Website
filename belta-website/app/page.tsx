@@ -7,6 +7,7 @@ import Hero from "@/components/Hero";
 import ProductGrid from "@/components/ProductGrid";
 import InstagramFeed from "@/components/InstagramFeed";
 import Footer from "@/components/Footer";
+import AuthModal from "@/components/AuthModal";
 
 export default function Home() {
   const [lang, setLang] = useState<"en" | "ar">("en");
@@ -21,6 +22,7 @@ export default function Home() {
         <InstagramFeed lang={lang} />
       </main>
       <Footer lang={lang} />
+      <AuthModal />
     </>
   );
 }
