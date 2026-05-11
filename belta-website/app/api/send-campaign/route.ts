@@ -164,7 +164,7 @@ export async function POST(request: NextRequest) {
 
     // Send to all subscribers via Resend batch
     const emails = subscribers.map((sub) => ({
-      from: "Beltà <onboarding@resend.dev>",
+      from: "Beltà Scarfs <onboarding@resend.dev>",
       to: sub.email as string,
       subject: subject.trim(),
       html,
