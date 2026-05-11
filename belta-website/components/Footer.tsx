@@ -57,7 +57,7 @@ export default function Footer({ lang = "en", onNav }: FooterProps) {
             </a>
           </div>
 
-          {/* Center — nav links */}
+          {/* Center — nav links + WhatsApp CTA */}
           <nav
             className="belta-footer-center"
             style={{
@@ -72,6 +72,33 @@ export default function Footer({ lang = "en", onNav }: FooterProps) {
                 {label}
               </FooterNavLink>
             ))}
+
+            <div style={{ width: "100%", height: "1px", background: "rgba(245,239,230,0.08)" }} />
+
+            <a
+              href="https://wa.me/96170000000"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="belta-footer-whatsapp"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+                fontFamily: "var(--font-body)",
+                fontSize: "13px",
+                fontWeight: 500,
+                color: "rgba(245,239,230,0.85)",
+                textDecoration: "none",
+                transition: "color 280ms var(--ease-out)",
+                minHeight: "44px",
+                whiteSpace: "nowrap",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "var(--fg-on-dark)")}
+              onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(245,239,230,0.85)")}
+            >
+              <WhatsAppIcon />
+              {lang === "ar" ? "تواصل معنا على واتساب →" : "Contact us on WhatsApp →"}
+            </a>
           </nav>
 
           {/* Right — social icons + tagline */}

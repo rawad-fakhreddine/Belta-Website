@@ -413,11 +413,12 @@ a:hover {
   .belta-product-card        { overflow: hidden !important; }
   .belta-product-card-image  { aspect-ratio: 3 / 4 !important; }
   .belta-skeleton-card-image { aspect-ratio: 3 / 4 !important; }
-  .belta-toggle-card-wrapper button { font-size: 9px !important; padding: 3px 8px !important; letter-spacing: 0.1em !important; }
-  .belta-card-info     { padding: 10px 2px 0 !important; }
-  .belta-card-name     { font-size: 18px !important; }
+  /* Hide styled/product toggle on mobile — too cramped in 2-col grid */
+  .belta-toggle-card-wrapper { display: none !important; }
+  .belta-card-info     { padding: 10px 4px 0 !important; }
+  .belta-card-name     { font-size: 15px !important; line-height: 1.3 !important; }
   .belta-card-material { font-size: 11px !important; }
-  .belta-card-price    { font-size: 14px !important; }
+  .belta-card-price    { font-size: 13px !important; margin-top: 2px !important; }
 
   /* Hero photos */
   .belta-hero-photo-primary   { max-height: 380px !important; overflow: hidden !important; }

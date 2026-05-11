@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import PhotoZone from "@/components/PhotoZone";
 import StyledProductToggle from "@/components/StyledProductToggle";
 
@@ -10,14 +9,12 @@ type ToggleValue = "lifestyle" | "product";
 
 interface HeroProps {
   lang?: Lang;
-  onShop?: () => void;
 }
 
-export default function Hero({ lang = "en", onShop }: HeroProps) {
+export default function Hero({ lang = "en" }: HeroProps) {
   const [photoMode, setPhotoMode] = useState<ToggleValue>("lifestyle");
   const secondaryMode: ToggleValue = photoMode === "lifestyle" ? "product" : "lifestyle";
   const isRtl = lang === "ar";
-  const router = useRouter();
 
   return (
     <section style={{ background: "var(--bg)", width: "100%" }}>
@@ -88,18 +85,6 @@ export default function Hero({ lang = "en", onShop }: HeroProps) {
               : "مقطوع ومرسوم ومطبوع في بيروت. اثنان وأربعون قطعة فقط، لن تتكرر."}
           </p>
 
-          {/* Buttons */}
-          <div
-            className="belta-hero-buttons"
-            style={{ display: "flex", alignItems: "center", gap: "16px", flexWrap: "wrap" }}
-          >
-            <PrimaryButton onClick={() => router.push("/shop")} fullWidthClass>
-              {lang === "en" ? "Shop the season" : "تسوّقي الموسم"}
-            </PrimaryButton>
-            <GhostButton onClick={() => router.push("/shop")} fullWidthClass>
-              {lang === "en" ? "From the atelier →" : "← من المشغل"}
-            </GhostButton>
-          </div>
         </div>
 
         {/* ── Photo zones ───────────────────────────────────────────────── */}
@@ -142,82 +127,3 @@ export default function Hero({ lang = "en", onShop }: HeroProps) {
   );
 }
 
-/* ─── Button sub-components ──────────────────────────────────────────────── */
-
-function PrimaryButton({
-  children,
-  onClick,
-  fullWidthClass,
-}: {
-  children: React.ReactNode;
-  onClick?: () => void;
-  fullWidthClass?: boolean;
-}) {
-  const [hovered, setHovered] = useState(false);
-
-  return (
-    <button
-      onClick={onClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      className={fullWidthClass ? "belta-hero-btn" : ""}
-      style={{
-        fontFamily: "var(--font-body)",
-        fontSize: "15px",
-        fontWeight: 500,
-        letterSpacing: "0.01em",
-        padding: "14px 26px",
-        borderRadius: "var(--radius-md)",
-        border: "none",
-        background: hovered ? "var(--brand-hover)" : "var(--brand)",
-        color: "var(--fg-on-brand)",
-        cursor: "pointer",
-        transition: "background 280ms var(--ease-out)",
-        lineHeight: 1,
-        minHeight: "44px",
-      }}
-    >
-      {children}
-    </button>
-  );
-}
-
-function GhostButton({
-  children,
-  onClick,
-  fullWidthClass,
-}: {
-  children: React.ReactNode;
-  onClick?: () => void;
-  fullWidthClass?: boolean;
-}) {
-  const [hovered, setHovered] = useState(false);
-
-  return (
-    <button
-      onClick={onClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      className={fullWidthClass ? "belta-hero-btn" : ""}
-      style={{
-        fontFamily: "var(--font-body)",
-        fontSize: "15px",
-        fontWeight: 500,
-        letterSpacing: "0.01em",
-        padding: "14px 0",
-        borderRadius: 0,
-        border: "none",
-        background: "transparent",
-        color: hovered ? "var(--brand-hover)" : "var(--brand)",
-        cursor: "pointer",
-        transition: "color 280ms var(--ease-out)",
-        textDecoration: hovered ? "underline" : "none",
-        textUnderlineOffset: "3px",
-        lineHeight: 1,
-        minHeight: "44px",
-      }}
-    >
-      {children}
-    </button>
-  );
-}

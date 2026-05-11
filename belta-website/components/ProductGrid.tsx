@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import ProductCard from "@/components/ProductCard";
 import { PRODUCTS as FALLBACK_PRODUCTS } from "@/lib/products";
 import { supabase, type ProductRow } from "@/lib/supabase";
@@ -28,8 +28,9 @@ interface ProductGridProps {
 export default function ProductGrid({ lang = "en", onOpenProduct }: ProductGridProps) {
   const [products, setProducts] = useState<ProductWithFilter[]>([]);
   const [status, setStatus]     = useState<Status>("loading");
-  const [linkHovered, setLinkHovered] = useState(false);
+  const [btnHovered, setBtnHovered] = useState(false);
   const isRtl = lang === "ar";
+  const router = useRouter();
 
   useEffect(() => {
     let cancelled = false;
@@ -41,7 +42,8 @@ export default function ProductGrid({ lang = "en", onOpenProduct }: ProductGridP
         .from("products")
         .select("*")
         .eq("active", true)
-        .order("created_at", { ascending: true });
+        .order("created_at", { ascending: true })
+        .limit(8);
 
       if (cancelled) return;
 
@@ -80,63 +82,40 @@ export default function ProductGrid({ lang = "en", onOpenProduct }: ProductGridP
         <div
           style={{
             display: "flex",
-            alignItems: "flex-end",
-            justifyContent: "space-between",
+            flexDirection: "column",
+            gap: "10px",
             marginBottom: "40px",
-            gap: "16px",
           }}
         >
-          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-            <span
-              style={{
-                fontFamily: "var(--font-body)",
-                fontSize: "var(--fs-eyebrow)",
-                fontWeight: 500,
-                letterSpacing: "var(--tracking-eyebrow)",
-                textTransform: "uppercase",
-                color: "var(--brand)",
-                lineHeight: 1,
-              }}
-            >
-              {lang === "en" ? "New this season" : "جديد هذا الموسم"}
-            </span>
-
-            <h2
-              style={{
-                fontFamily: "var(--font-display)",
-                fontSize: "var(--fs-h2)",
-                fontWeight: 600,
-                lineHeight: "var(--lh-snug)",
-                letterSpacing: "var(--tracking-tight)",
-                color: "var(--fg)",
-                margin: 0,
-              }}
-            >
-              {lang === "en"
-                ? "Four pieces for a long spring"
-                : "أربع قطع لربيع طويل"}
-            </h2>
-          </div>
-
-          <Link
-            href="/shop"
-            onMouseEnter={() => setLinkHovered(true)}
-            onMouseLeave={() => setLinkHovered(false)}
+          <span
             style={{
               fontFamily: "var(--font-body)",
-              fontSize: "14px",
+              fontSize: "var(--fs-eyebrow)",
               fontWeight: 500,
-              color: linkHovered ? "var(--brand-hover)" : "var(--brand)",
-              textDecoration: linkHovered ? "underline" : "none",
-              textUnderlineOffset: "3px",
-              transition: "color 280ms var(--ease-out)",
-              whiteSpace: "nowrap",
-              flexShrink: 0,
-              paddingBottom: "6px",
+              letterSpacing: "var(--tracking-eyebrow)",
+              textTransform: "uppercase",
+              color: "var(--brand)",
+              lineHeight: 1,
             }}
           >
-            {lang === "en" ? "View all pieces →" : "← عرض كل القطع"}
-          </Link>
+            {lang === "en" ? "New this season" : "جديد هذا الموسم"}
+          </span>
+
+          <h2
+            style={{
+              fontFamily: "var(--font-display)",
+              fontSize: "var(--fs-h2)",
+              fontWeight: 600,
+              lineHeight: "var(--lh-snug)",
+              letterSpacing: "var(--tracking-tight)",
+              color: "var(--fg)",
+              margin: 0,
+            }}
+          >
+            {lang === "en"
+              ? "Our scarfs collection"
+              : "مجموعة وشاحاتنا"}
+          </h2>
         </div>
 
         {/* ── Error notice ─────────────────────────────────────────────── */}
@@ -158,7 +137,7 @@ export default function ProductGrid({ lang = "en", onOpenProduct }: ProductGridP
         {/* ── Grid ─────────────────────────────────────────────────────── */}
         <div className="belta-product-grid">
           {status === "loading"
-            ? Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)
+            ? Array.from({ length: 8 }).map((_, i) => <SkeletonCard key={i} />)
             : products.map((product, i) => (
                 <ProductCard
                   key={product.name}
@@ -168,6 +147,34 @@ export default function ProductGrid({ lang = "en", onOpenProduct }: ProductGridP
                 />
               ))}
         </div>
+
+        {/* ── Shop CTA ─────────────────────────────────────────────────── */}
+        {status !== "loading" && (
+          <div style={{ display: "flex", justifyContent: "center", marginTop: "48px" }}>
+            <button
+              onClick={() => router.push("/shop")}
+              onMouseEnter={() => setBtnHovered(true)}
+              onMouseLeave={() => setBtnHovered(false)}
+              style={{
+                fontFamily: "var(--font-body)",
+                fontSize: "15px",
+                fontWeight: 500,
+                letterSpacing: "0.01em",
+                padding: "14px 36px",
+                borderRadius: "var(--radius-md)",
+                border: "none",
+                background: btnHovered ? "var(--brand-hover)" : "var(--brand)",
+                color: "var(--fg-on-brand)",
+                cursor: "pointer",
+                transition: "background 280ms var(--ease-out)",
+                lineHeight: 1,
+                minHeight: "44px",
+              }}
+            >
+              {lang === "en" ? "Shop the collection →" : "← تسوّقي المجموعة"}
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );
