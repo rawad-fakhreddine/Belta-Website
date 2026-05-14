@@ -214,7 +214,7 @@ function WhatsAppButton({ lang }: { lang: "en" | "ar" }) {
   const [hovered, setHovered] = useState(false);
   return (
     <a
-      href="https://wa.me/"
+      href="https://wa.me/96171483747"
       target="_blank"
       rel="noopener noreferrer"
       onMouseEnter={() => setHovered(true)}

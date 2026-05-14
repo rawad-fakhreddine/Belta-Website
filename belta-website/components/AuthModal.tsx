@@ -26,9 +26,14 @@ export default function AuthModal() {
   }, []);
 
   // Start 4s timer only after auth check completes and user is not logged in
+  // Show only once per device — skip if already seen
   useEffect(() => {
     if (checking || loggedIn) return;
-    const timer = setTimeout(() => setVisible(true), 4000);
+    if (localStorage.getItem("belta_seen_signin")) return;
+    const timer = setTimeout(() => {
+      localStorage.setItem("belta_seen_signin", "1");
+      setVisible(true);
+    }, 4000);
     return () => clearTimeout(timer);
   }, [checking, loggedIn]);
 

@@ -76,7 +76,7 @@ export default function Footer({ lang = "en", onNav }: FooterProps) {
             <div style={{ width: "100%", height: "1px", background: "rgba(245,239,230,0.08)" }} />
 
             <a
-              href="https://wa.me/96170000000"
+              href="https://wa.me/96171483747"
               target="_blank"
               rel="noopener noreferrer"
               className="belta-footer-whatsapp"
@@ -113,7 +113,7 @@ export default function Footer({ lang = "en", onNav }: FooterProps) {
           >
             <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
               <SocialButton label="Instagram"><InstagramIcon /></SocialButton>
-              <SocialButton label="WhatsApp"><WhatsAppIcon /></SocialButton>
+              <WhatsAppSocialLink />
 
               <div
                 style={{
@@ -230,6 +230,34 @@ function FooterNavLink({
     >
       {children}
     </Link>
+  );
+}
+
+function WhatsAppSocialLink() {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <a
+      href="https://wa.me/96171483747"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="WhatsApp"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="belta-touch"
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "none",
+        padding: "4px",
+        color: hovered ? "var(--fg-on-dark)" : "rgba(245,239,230,0.85)",
+        transition: "color 280ms var(--ease-out)",
+        borderRadius: "var(--radius-sm)",
+        textDecoration: "none",
+      }}
+    >
+      <WhatsAppIcon />
+    </a>
   );
 }
 

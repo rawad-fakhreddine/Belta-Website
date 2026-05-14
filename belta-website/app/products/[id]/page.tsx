@@ -50,6 +50,19 @@ export default function ProductPage() {
     fetchProduct();
   }, [id]);
 
+  // Pre-fill order form from signed-in user's profile
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (!user) return;
+      const m = user.user_metadata ?? {};
+      if (m.full_name) setCustName(m.full_name);
+      if (m.phone)     setPhone(m.phone);
+      const addrParts = [m.address, m.city].filter(Boolean);
+      if (addrParts.length) setAddress(addrParts.join(", "));
+      if (user.email)  setEmail(user.email);
+    });
+  }, []);
+
   const handleAddToBag = () => {
     if (!product) return;
     addItem({
@@ -84,7 +97,7 @@ export default function ProductPage() {
       ...(email.trim() ? [lang === "en" ? `Email: ${email}` : `البريد: ${email}`] : []),
     ];
     window.open(
-      `https://wa.me/96170000000?text=${encodeURIComponent(lines.join("\n"))}`,
+      `https://wa.me/96171483747?text=${encodeURIComponent(lines.join("\n"))}`,
       "_blank"
     );
   };
