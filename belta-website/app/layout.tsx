@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { CartProvider } from "@/lib/cart";
 
 export const metadata: Metadata = {
   title: "Beltà Scarfs",
@@ -13,7 +14,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" dir="ltr" className="h-full">
-      <body suppressHydrationWarning className="min-h-full flex flex-col antialiased overflow-x-hidden">{children}</body>
+      <body suppressHydrationWarning className="min-h-full flex flex-col antialiased overflow-x-hidden">
+        <CartProvider>
+          {children}
+        </CartProvider>
+      </body>
     </html>
   );
 }

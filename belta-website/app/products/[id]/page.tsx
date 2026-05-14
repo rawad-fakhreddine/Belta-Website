@@ -3,7 +3,9 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { Minus, Plus } from "lucide-react";
 import { supabase, type ProductRow } from "@/lib/supabase";
+import { useCart } from "@/lib/cart";
 import PhotoZone from "@/components/PhotoZone";
 import AnnouncementBar from "@/components/AnnouncementBar";
 import Navbar from "@/components/Navbar";
@@ -17,9 +19,20 @@ const BADGE_STYLES: Record<string, { background: string; color: string }> = {
 
 export default function ProductPage() {
   const { id } = useParams<{ id: string }>();
+  const { addItem } = useCart();
+
   const [product, setProduct] = useState<ProductRow | null>(null);
-  const [status, setStatus]   = useState<"loading" | "found" | "not-found">("loading");
-  const [lang, setLang]       = useState<"en" | "ar">("en");
+  const [status,  setStatus]  = useState<"loading" | "found" | "not-found">("loading");
+  const [lang,    setLang]    = useState<"en" | "ar">("en");
+
+  // Order form
+  const [qty,      setQty]      = useState(1);
+  const [custName, setCustName] = useState("");
+  const [phone,    setPhone]    = useState("");
+  const [address,  setAddress]  = useState("");
+  const [email,    setEmail]    = useState("");
+  const [added,    setAdded]    = useState(false);
+  const [waError,  setWaError]  = useState(false);
 
   useEffect(() => {
     async function fetchProduct() {
@@ -30,15 +43,53 @@ export default function ProductPage() {
         .eq("active", true)
         .single();
 
-      if (error || !data) {
-        setStatus("not-found");
-        return;
-      }
+      if (error || !data) { setStatus("not-found"); return; }
       setProduct(data as ProductRow);
       setStatus("found");
     }
     fetchProduct();
   }, [id]);
+
+  const handleAddToBag = () => {
+    if (!product) return;
+    addItem({
+      productId: product.id,
+      name:      product.name,
+      name_ar:   product.name_ar,
+      material:  product.material,
+      price:     product.price,
+      quantity:  qty,
+    });
+    setAdded(true);
+    setTimeout(() => setAdded(false), 2200);
+  };
+
+  const handleWhatsApp = () => {
+    if (!product) return;
+    if (!custName.trim() || !phone.trim() || !address.trim()) {
+      setWaError(true);
+      setTimeout(() => setWaError(false), 3000);
+      return;
+    }
+    const lines = [
+      lang === "en" ? "Hi! I'd like to place an order from Beltà:" : "مرحبا! أريد تقديم طلب من Beltà:",
+      "",
+      lang === "en" ? `Product: ${product.name}` : `المنتج: ${product.name_ar ?? product.name}`,
+      lang === "en" ? `Quantity: ${qty}` : `الكمية: ${qty}`,
+      lang === "en" ? `Price: ${product.price}` : `السعر: ${product.price}`,
+      "",
+      lang === "en" ? `Name: ${custName}` : `الاسم: ${custName}`,
+      lang === "en" ? `Phone: ${phone}` : `الهاتف: ${phone}`,
+      lang === "en" ? `Address: ${address}` : `العنوان: ${address}`,
+      ...(email.trim() ? [lang === "en" ? `Email: ${email}` : `البريد: ${email}`] : []),
+    ];
+    window.open(
+      `https://wa.me/96170000000?text=${encodeURIComponent(lines.join("\n"))}`,
+      "_blank"
+    );
+  };
+
+  const isRtl = lang === "ar";
 
   return (
     <>
@@ -51,87 +102,20 @@ export default function ProductPage() {
             maxWidth: "var(--container)",
             margin: "0 auto",
             padding: "40px 32px 96px",
+            direction: isRtl ? "rtl" : "ltr",
           }}
         >
           {/* Back link */}
-          <Link
-            href="/"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "6px",
-              fontFamily: "var(--font-body)",
-              fontSize: "13px",
-              fontWeight: 500,
-              color: "var(--fg-muted)",
-              textDecoration: "none",
-              letterSpacing: "0.04em",
-              marginBottom: "40px",
-              transition: "color 180ms var(--ease-out)",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "var(--brand)")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "var(--fg-muted)")}
-          >
-            ← {lang === "en" ? "Collection" : "المجموعة"}
-          </Link>
+          <BackLink lang={lang} />
 
-          {status === "loading" && (
-            <div className="belta-product-detail-layout">
-              <div
-                style={{
-                  aspectRatio: "4 / 5",
-                  borderRadius: "var(--radius-xl)",
-                  background: "var(--belta-cream-deep)",
-                  animation: "belta-pulse 1.6s ease-in-out infinite",
-                }}
-              />
-              <div style={{ display: "flex", flexDirection: "column", gap: "16px", paddingTop: "24px" }}>
-                {[70, 50, 40, 30].map((w, i) => (
-                  <div
-                    key={i}
-                    style={{
-                      height: i === 0 ? "40px" : "18px",
-                      width: `${w}%`,
-                      borderRadius: "var(--radius-sm)",
-                      background: "var(--belta-cream-deep)",
-                      animation: `belta-pulse 1.6s ease-in-out infinite ${i * 0.1}s`,
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
+          {status === "loading" && <LoadingSkeleton />}
 
-          {status === "not-found" && (
-            <div style={{ textAlign: "center", padding: "80px 0" }}>
-              <p
-                style={{
-                  fontFamily: "var(--font-display)",
-                  fontSize: "var(--fs-h3)",
-                  color: "var(--fg-muted)",
-                  marginBottom: "16px",
-                }}
-              >
-                {lang === "en" ? "Product not found" : "المنتج غير موجود"}
-              </p>
-              <Link
-                href="/"
-                style={{
-                  fontFamily: "var(--font-body)",
-                  fontSize: "14px",
-                  color: "var(--brand)",
-                  textDecoration: "underline",
-                  textUnderlineOffset: "3px",
-                }}
-              >
-                {lang === "en" ? "Back to collection" : "العودة إلى المجموعة"}
-              </Link>
-            </div>
-          )}
+          {status === "not-found" && <NotFound lang={lang} />}
 
           {status === "found" && product && (
-            <div className="belta-product-detail-layout">
-              {/* Image */}
+            <div className="belta-pd-layout">
+
+              {/* ── Left: image ──────────────────────────────────────────── */}
               <div
                 style={{
                   aspectRatio: "4 / 5",
@@ -139,20 +123,16 @@ export default function ProductPage() {
                   overflow: "hidden",
                   background: "var(--surface)",
                   boxShadow: "var(--shadow-md)",
+                  position: "sticky",
+                  top: "88px",
                 }}
               >
                 <PhotoZone />
               </div>
 
-              {/* Info */}
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "0",
-                  paddingTop: "8px",
-                }}
-              >
+              {/* ── Right: info + form ───────────────────────────────────── */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "0", paddingTop: "8px" }}>
+
                 {/* Badge */}
                 {product.badge && (
                   <span
@@ -175,29 +155,29 @@ export default function ProductPage() {
                   </span>
                 )}
 
-                {/* Name */}
+                {/* Product name */}
                 <h1
                   style={{
                     fontFamily: "var(--font-display)",
-                    fontSize: "var(--fs-h1)",
+                    fontSize: "clamp(36px, 5vw, 52px)",
                     fontWeight: 600,
                     lineHeight: "var(--lh-tight)",
                     letterSpacing: "var(--tracking-tight)",
                     color: "var(--fg)",
-                    margin: "0 0 8px",
+                    margin: "0 0 6px",
                   }}
                 >
                   {lang === "ar" && product.name_ar ? product.name_ar : product.name}
                 </h1>
 
-                {/* Arabic name (shown in EN mode if available) */}
+                {/* Arabic secondary name */}
                 {lang === "en" && product.name_ar && (
                   <p
                     style={{
                       fontFamily: "var(--font-arabic)",
-                      fontSize: "22px",
+                      fontSize: "20px",
                       color: "var(--fg-muted)",
-                      margin: "0 0 24px",
+                      margin: "0 0 16px",
                       lineHeight: "var(--lh-relaxed)",
                     }}
                   >
@@ -212,7 +192,7 @@ export default function ProductPage() {
                     fontSize: "var(--fs-small)",
                     color: "var(--fg-subtle)",
                     letterSpacing: "0.04em",
-                    margin: "0 0 24px",
+                    margin: "0 0 20px",
                     lineHeight: "var(--lh-normal)",
                   }}
                 >
@@ -223,27 +203,141 @@ export default function ProductPage() {
                 <p
                   style={{
                     fontFamily: "var(--font-display)",
-                    fontSize: "32px",
+                    fontSize: "36px",
                     fontWeight: 400,
                     color: "var(--fg)",
-                    margin: "0 0 40px",
-                    lineHeight: "var(--lh-snug)",
+                    margin: "0 0 28px",
+                    lineHeight: 1,
                   }}
                 >
                   {product.price}
                 </p>
 
-                {/* Divider */}
-                <div
-                  style={{
-                    height: "1px",
-                    background: "var(--border)",
-                    marginBottom: "40px",
-                  }}
-                />
+                {/* Quantity */}
+                <div style={{ marginBottom: "32px" }}>
+                  <label
+                    style={{
+                      fontFamily: "var(--font-body)",
+                      fontSize: "12px",
+                      fontWeight: 500,
+                      color: "var(--fg-muted)",
+                      letterSpacing: "0.08em",
+                      textTransform: "uppercase",
+                      display: "block",
+                      marginBottom: "10px",
+                    }}
+                  >
+                    {lang === "en" ? "Quantity" : "الكمية"}
+                  </label>
+                  <div
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      border: "1px solid var(--border-strong)",
+                      borderRadius: "var(--radius-md)",
+                      overflow: "hidden",
+                    }}
+                  >
+                    <StepButton onClick={() => setQty(Math.max(1, qty - 1))} aria="Decrease quantity">
+                      <Minus size={14} strokeWidth={2} />
+                    </StepButton>
+                    <span
+                      style={{
+                        fontFamily: "var(--font-body)",
+                        fontSize: "15px",
+                        fontWeight: 500,
+                        color: "var(--fg)",
+                        minWidth: "48px",
+                        textAlign: "center",
+                        padding: "10px 4px",
+                        userSelect: "none",
+                      }}
+                    >
+                      {qty}
+                    </span>
+                    <StepButton onClick={() => setQty(qty + 1)} aria="Increase quantity">
+                      <Plus size={14} strokeWidth={2} />
+                    </StepButton>
+                  </div>
+                </div>
 
-                {/* WhatsApp CTA */}
-                <WhatsAppButton lang={lang} productName={product.name} />
+                {/* Divider */}
+                <div style={{ height: "1px", background: "var(--border)", marginBottom: "32px" }} />
+
+                {/* Order details heading */}
+                <p
+                  style={{
+                    fontFamily: "var(--font-body)",
+                    fontSize: "12px",
+                    fontWeight: 500,
+                    color: "var(--fg-muted)",
+                    letterSpacing: "0.10em",
+                    textTransform: "uppercase",
+                    margin: "0 0 20px",
+                  }}
+                >
+                  {lang === "en" ? "Your details" : "بياناتك"}
+                </p>
+
+                {/* Form fields */}
+                <div style={{ display: "flex", flexDirection: "column", gap: "14px", marginBottom: "32px" }}>
+                  <OrderField
+                    label={lang === "en" ? "Full name" : "الاسم الكامل"}
+                    placeholder={lang === "en" ? "Your name" : "اسمك"}
+                    value={custName}
+                    onChange={setCustName}
+                    required
+                  />
+                  <OrderField
+                    label={lang === "en" ? "Phone number" : "رقم الهاتف"}
+                    placeholder={lang === "en" ? "+961 XX XXX XXX" : "٩٦١+"}
+                    type="tel"
+                    value={phone}
+                    onChange={setPhone}
+                    required
+                  />
+                  <OrderField
+                    label={lang === "en" ? "Address & city" : "العنوان والمدينة"}
+                    placeholder={lang === "en" ? "Street, area, city" : "الشارع، المنطقة، المدينة"}
+                    value={address}
+                    onChange={setAddress}
+                    required
+                    multiline
+                  />
+                  <OrderField
+                    label={lang === "en" ? "Email (optional)" : "البريد الإلكتروني (اختياري)"}
+                    placeholder={lang === "en" ? "your@email.com" : "بريدك الإلكتروني"}
+                    type="email"
+                    value={email}
+                    onChange={setEmail}
+                  />
+                </div>
+
+                {/* Validation hint */}
+                {waError && (
+                  <p
+                    style={{
+                      fontFamily: "var(--font-body)",
+                      fontSize: "13px",
+                      color: "var(--danger)",
+                      margin: "0 0 16px",
+                      lineHeight: "var(--lh-normal)",
+                    }}
+                  >
+                    {lang === "en"
+                      ? "Please fill in your name, phone, and address to order via WhatsApp."
+                      : "يرجى ملء الاسم والهاتف والعنوان للطلب عبر واتساب."}
+                  </p>
+                )}
+
+                {/* CTA buttons */}
+                <div className="belta-pd-ctas">
+                  {/* Add to bag */}
+                  <AddToBagButton added={added} onClick={handleAddToBag} lang={lang} />
+
+                  {/* WhatsApp */}
+                  <WhatsAppButton onClick={handleWhatsApp} lang={lang} />
+                </div>
 
                 {/* Shipping note */}
                 <p
@@ -269,16 +363,24 @@ export default function ProductPage() {
       <Footer lang={lang} />
 
       <style>{`
-        .belta-product-detail-layout {
+        .belta-pd-layout {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 64px;
+          gap: 72px;
           align-items: start;
         }
+        .belta-pd-ctas {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 12px;
+        }
         @media (max-width: 768px) {
-          .belta-product-detail-layout {
+          .belta-pd-layout {
             grid-template-columns: 1fr;
             gap: 32px;
+          }
+          .belta-pd-ctas {
+            grid-template-columns: 1fr;
           }
         }
       `}</style>
@@ -286,34 +388,196 @@ export default function ProductPage() {
   );
 }
 
-function WhatsAppButton({ lang, productName }: { lang: "en" | "ar"; productName: string }) {
-  const [hovered, setHovered] = useState(false);
-  const message = lang === "en"
-    ? `Hi! I'm interested in ordering the ${productName} scarf.`
-    : `مرحبا! أريد طلب وشاح ${productName}.`;
-  const href = `https://wa.me/96170000000?text=${encodeURIComponent(message)}`;
+/* ─── Sub-components ──────────────────────────────────────────────────────── */
+
+function BackLink({ lang }: { lang: "en" | "ar" }) {
+  return (
+    <Link
+      href="/"
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: "6px",
+        fontFamily: "var(--font-body)",
+        fontSize: "13px",
+        fontWeight: 500,
+        color: "var(--fg-muted)",
+        textDecoration: "none",
+        letterSpacing: "0.04em",
+        marginBottom: "40px",
+        transition: "color 180ms var(--ease-out)",
+      }}
+      onMouseEnter={(e) => (e.currentTarget.style.color = "var(--brand)")}
+      onMouseLeave={(e) => (e.currentTarget.style.color = "var(--fg-muted)")}
+    >
+      {lang === "en" ? "← Collection" : "المجموعة →"}
+    </Link>
+  );
+}
+
+function OrderField({
+  label,
+  placeholder,
+  type = "text",
+  value,
+  onChange,
+  required,
+  multiline,
+}: {
+  label: string;
+  placeholder: string;
+  type?: string;
+  value: string;
+  onChange: (v: string) => void;
+  required?: boolean;
+  multiline?: boolean;
+}) {
+  const [focused, setFocused] = useState(false);
+
+  const sharedStyle: React.CSSProperties = {
+    width: "100%",
+    padding: "11px 14px",
+    border: focused ? "1px solid var(--brand)" : "1px solid var(--border-strong)",
+    borderRadius: "var(--radius-md)",
+    background: "var(--bg-raised)",
+    fontFamily: "var(--font-body)",
+    fontSize: "14px",
+    color: "var(--fg)",
+    outline: "none",
+    boxShadow: focused ? "0 0 0 3px rgba(139,69,19,0.15)" : "none",
+    transition: "border-color 280ms var(--ease-out), box-shadow 280ms var(--ease-out)",
+    boxSizing: "border-box",
+    resize: "none",
+    lineHeight: "var(--lh-normal)",
+  };
 
   return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
+    <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+      <label
+        style={{
+          fontFamily: "var(--font-body)",
+          fontSize: "12px",
+          fontWeight: 500,
+          color: "var(--fg-muted)",
+          letterSpacing: "0.02em",
+        }}
+      >
+        {label}
+        {required && (
+          <span style={{ color: "var(--brand)", marginInlineStart: "3px" }}>*</span>
+        )}
+      </label>
+      {multiline ? (
+        <textarea
+          placeholder={placeholder}
+          value={value}
+          rows={3}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
+          onChange={(e) => onChange(e.target.value)}
+          style={sharedStyle}
+        />
+      ) : (
+        <input
+          type={type}
+          placeholder={placeholder}
+          value={value}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
+          onChange={(e) => onChange(e.target.value)}
+          style={sharedStyle}
+        />
+      )}
+    </div>
+  );
+}
+
+function StepButton({ onClick, aria, children }: { onClick: () => void; aria: string; children: React.ReactNode }) {
+  return (
+    <button
+      onClick={onClick}
+      aria-label={aria}
+      style={{
+        background: "none",
+        border: "none",
+        cursor: "pointer",
+        color: "var(--fg-muted)",
+        padding: "10px 14px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        transition: "color 180ms var(--ease-out), background 180ms var(--ease-out)",
+      }}
+      onMouseEnter={(e) => {
+        (e.currentTarget as HTMLElement).style.background = "var(--bg-alt)";
+        (e.currentTarget as HTMLElement).style.color = "var(--fg)";
+      }}
+      onMouseLeave={(e) => {
+        (e.currentTarget as HTMLElement).style.background = "none";
+        (e.currentTarget as HTMLElement).style.color = "var(--fg-muted)";
+      }}
+    >
+      {children}
+    </button>
+  );
+}
+
+function AddToBagButton({ added, onClick, lang }: { added: boolean; onClick: () => void; lang: "en" | "ar" }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <button
+      onClick={onClick}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        fontFamily: "var(--font-body)",
+        fontSize: "14px",
+        fontWeight: 500,
+        letterSpacing: "0.01em",
+        padding: "14px 20px",
+        borderRadius: "var(--radius-md)",
+        border: added ? "none" : "1px solid var(--fg)",
+        background: added
+          ? "var(--success)"
+          : hovered
+          ? "var(--fg)"
+          : "transparent",
+        color: added || hovered ? "var(--fg-on-dark)" : "var(--fg)",
+        cursor: "pointer",
+        transition: "background 280ms var(--ease-out), color 280ms var(--ease-out), border-color 280ms var(--ease-out)",
+        lineHeight: 1,
+        minHeight: "52px",
+      }}
+    >
+      {added
+        ? lang === "en" ? "Added ✓" : "تمت الإضافة ✓"
+        : lang === "en" ? "Add to bag" : "أضيفي للحقيبة"}
+    </button>
+  );
+}
+
+function WhatsAppButton({ onClick, lang }: { onClick: () => void; lang: "en" | "ar" }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <button
+      onClick={onClick}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        gap: "10px",
+        gap: "8px",
         fontFamily: "var(--font-body)",
-        fontSize: "15px",
+        fontSize: "14px",
         fontWeight: 500,
         letterSpacing: "0.01em",
-        padding: "14px 28px",
+        padding: "14px 20px",
         borderRadius: "var(--radius-md)",
+        border: "none",
         background: hovered ? "var(--brand-hover)" : "var(--brand)",
         color: "var(--fg-on-brand)",
-        textDecoration: "none",
+        cursor: "pointer",
         transition: "background 280ms var(--ease-out)",
         lineHeight: 1,
         minHeight: "52px",
@@ -321,13 +585,71 @@ function WhatsAppButton({ lang, productName }: { lang: "en" | "ar"; productName:
     >
       <WhatsAppIcon />
       {lang === "en" ? "Order via WhatsApp" : "اطلبي عبر واتساب"}
-    </a>
+    </button>
+  );
+}
+
+function LoadingSkeleton() {
+  return (
+    <div className="belta-pd-layout">
+      <div
+        style={{
+          aspectRatio: "4 / 5",
+          borderRadius: "var(--radius-xl)",
+          background: "var(--belta-cream-deep)",
+          animation: "belta-pulse 1.6s ease-in-out infinite",
+        }}
+      />
+      <div style={{ display: "flex", flexDirection: "column", gap: "16px", paddingTop: "24px" }}>
+        {[60, 40, 80, 30].map((w, i) => (
+          <div
+            key={i}
+            style={{
+              height: i === 0 ? "44px" : "18px",
+              width: `${w}%`,
+              borderRadius: "var(--radius-sm)",
+              background: "var(--belta-cream-deep)",
+              animation: `belta-pulse 1.6s ease-in-out infinite ${i * 0.1}s`,
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function NotFound({ lang }: { lang: "en" | "ar" }) {
+  return (
+    <div style={{ textAlign: "center", padding: "80px 0" }}>
+      <p
+        style={{
+          fontFamily: "var(--font-display)",
+          fontSize: "var(--fs-h3)",
+          color: "var(--fg-muted)",
+          marginBottom: "16px",
+        }}
+      >
+        {lang === "en" ? "Product not found" : "المنتج غير موجود"}
+      </p>
+      <Link
+        href="/"
+        style={{
+          fontFamily: "var(--font-body)",
+          fontSize: "14px",
+          color: "var(--brand)",
+          textDecoration: "underline",
+          textUnderlineOffset: "3px",
+        }}
+      >
+        {lang === "en" ? "Back to collection" : "العودة إلى المجموعة"}
+      </Link>
+    </div>
   );
 }
 
 function WhatsAppIcon() {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
     </svg>
   );

@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Search, User, ShoppingBag, Menu, X } from "lucide-react";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
+import { useCart } from "@/lib/cart";
 import SearchPanel from "@/components/SearchPanel";
 import AccountDropdown from "@/components/AccountDropdown";
 import CartPanel from "@/components/CartPanel";
@@ -22,14 +23,13 @@ type PanelId = "search" | "account" | "cart";
 interface NavbarProps {
   lang?: "en" | "ar";
   onLangChange?: (lang: "en" | "ar") => void;
-  bagCount?: number;
 }
 
 export default function Navbar({
   lang = "en",
   onLangChange,
-  bagCount = 0,
 }: NavbarProps) {
+  const { totalCount: bagCount } = useCart();
   const [scrolled, setScrolled]       = useState(false);
   const [activePanel, setActivePanel] = useState<PanelId | null>(null);
   const [user, setUser]               = useState<SupabaseUser | null>(null);
@@ -520,7 +520,6 @@ export default function Navbar({
         isOpen={activePanel === "cart"}
         onClose={closeAll}
         lang={lang}
-        bagCount={bagCount}
       />
     </>
   );
