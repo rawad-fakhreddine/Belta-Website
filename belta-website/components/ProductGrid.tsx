@@ -60,7 +60,16 @@ export default function ProductGrid({ lang = "en" }: ProductGridProps) {
         return;
       }
 
-      setProducts((data as ProductRow[]).map(mapRow));
+      const real = (data as ProductRow[]).map(mapRow);
+      if (real.length < 8) {
+        const realNames = new Set(real.map((p) => p.name));
+        const padding = FALLBACK_PRODUCTS
+          .filter((p) => !realNames.has(p.name))
+          .slice(0, 8 - real.length);
+        setProducts([...real, ...padding]);
+      } else {
+        setProducts(real);
+      }
       setStatus("ok");
     }
 

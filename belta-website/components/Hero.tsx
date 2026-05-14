@@ -12,7 +12,7 @@ export default function Hero({ lang = "en" }: HeroProps) {
   const isRtl = lang === "ar";
 
   return (
-    <section style={{ background: "var(--bg)", width: "100%" }}>
+    <section style={{ background: "var(--brand)", width: "100%" }}>
       <div
         className="belta-hero-inner"
         style={{ direction: isRtl ? "rtl" : "ltr", maxWidth: "var(--container)", margin: "0 auto" }}
@@ -30,7 +30,7 @@ export default function Hero({ lang = "en" }: HeroProps) {
               fontWeight: 500,
               letterSpacing: "var(--tracking-eyebrow)",
               textTransform: "uppercase",
-              color: "var(--brand)",
+              color: "var(--belta-blush)",
               lineHeight: 1,
             }}
           >
@@ -46,19 +46,19 @@ export default function Hero({ lang = "en" }: HeroProps) {
               fontWeight: 600,
               lineHeight: "var(--lh-tight)",
               letterSpacing: "var(--tracking-tight)",
-              color: "var(--fg)",
+              color: "var(--fg-on-dark)",
               margin: 0,
             }}
           >
             {lang === "en" ? (
               <>
                 A scarf for the long{" "}
-                <em style={{ fontStyle: "italic", color: "var(--brand)" }}>afternoons</em>
+                <em style={{ fontStyle: "italic", color: "var(--belta-blush)" }}>afternoons</em>
               </>
             ) : (
               <>
                 وشاح لأجمل{" "}
-                <em style={{ fontStyle: "italic", color: "var(--brand)" }}>اللحظات</em>
+                <em style={{ fontStyle: "italic", color: "var(--belta-blush)" }}>اللحظات</em>
               </>
             )}
           </h1>
@@ -70,7 +70,7 @@ export default function Hero({ lang = "en" }: HeroProps) {
               fontFamily: "var(--font-body)",
               fontSize: "18px",
               lineHeight: "var(--lh-relaxed)",
-              color: "var(--fg-muted)",
+              color: "rgba(245, 239, 230, 0.72)",
               maxWidth: "460px",
               margin: 0,
             }}
