@@ -1,14 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import PhotoZone from "@/components/PhotoZone";
-import StyledProductToggle from "@/components/StyledProductToggle";
-
-type ToggleValue = "lifestyle" | "product";
 
 export type BadgeKind = "new" | "count" | "final" | null;
 
 export interface Product {
+  id?: number | string;
   name: string;
   material: string;
   price: string;
@@ -18,7 +17,6 @@ export interface Product {
 
 interface ProductCardProps {
   product: Product;
-  onOpen?: () => void;
   lang?: "en" | "ar";
 }
 
@@ -40,19 +38,21 @@ const BADGE_STYLES: Record<
   },
 };
 
-export default function ProductCard({ product, onOpen, lang = "en" }: ProductCardProps) {
-  const [mode, setMode] = useState<ToggleValue>("lifestyle");
+export default function ProductCard({ product, lang = "en" }: ProductCardProps) {
   const [hovered, setHovered] = useState(false);
   const isRtl = lang === "ar";
+  const href = product.id ? `/products/${product.id}` : "#";
 
   return (
-    <article
-      onClick={onOpen}
+    <Link
+      href={href}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       className="belta-product-card"
       style={{
-        cursor: onOpen ? "pointer" : "default",
+        textDecoration: "none",
+        color: "inherit",
+        display: "block",
         direction: isRtl ? "rtl" : "ltr",
       }}
     >
@@ -70,24 +70,18 @@ export default function ProductCard({ product, onOpen, lang = "en" }: ProductCar
           transition: "box-shadow 280ms var(--ease-out)",
         }}
       >
-        <PhotoZone mode={mode} kind="card" />
+        <PhotoZone />
 
-        {/* Overlay row: badge start · toggle end — single flex row prevents overlap */}
-        <div
-          style={{
-            position: "absolute",
-            top: "14px",
-            insetInlineStart: "14px",
-            insetInlineEnd: "14px",
-            display: "flex",
-            alignItems: "flex-start",
-            justifyContent: "space-between",
-            gap: "8px",
-            pointerEvents: "none",
-          }}
-        >
-          {/* Badge */}
-          {product.badge ? (
+        {/* Badge */}
+        {product.badge && (
+          <div
+            style={{
+              position: "absolute",
+              top: "14px",
+              insetInlineStart: "14px",
+              pointerEvents: "none",
+            }}
+          >
             <span
               style={{
                 ...BADGE_STYLES[product.badge],
@@ -100,30 +94,12 @@ export default function ProductCard({ product, onOpen, lang = "en" }: ProductCar
                 borderRadius: "999px",
                 lineHeight: 1,
                 whiteSpace: "nowrap",
-                pointerEvents: "auto",
-                flexShrink: 0,
               }}
             >
               {product.badgeLabel ?? product.badge}
             </span>
-          ) : (
-            <span />
-          )}
-
-          {/* Toggle */}
-          <div
-            className="belta-toggle-card-wrapper"
-            style={{ pointerEvents: "auto", flexShrink: 0 }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <StyledProductToggle
-              value={mode}
-              onChange={setMode}
-              size="sm"
-              variant="on-image"
-            />
           </div>
-        </div>
+        )}
       </div>
 
       {/* ── Card info ──────────────────────────────────────────────────── */}
@@ -176,6 +152,6 @@ export default function ProductCard({ product, onOpen, lang = "en" }: ProductCar
           {product.price}
         </p>
       </div>
-    </article>
+    </Link>
   );
 }

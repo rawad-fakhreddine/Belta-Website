@@ -1,19 +1,14 @@
 "use client";
 
-import { useState } from "react";
 import PhotoZone from "@/components/PhotoZone";
-import StyledProductToggle from "@/components/StyledProductToggle";
 
 type Lang = "en" | "ar";
-type ToggleValue = "lifestyle" | "product";
 
 interface HeroProps {
   lang?: Lang;
 }
 
 export default function Hero({ lang = "en" }: HeroProps) {
-  const [photoMode, setPhotoMode] = useState<ToggleValue>("lifestyle");
-  const secondaryMode: ToggleValue = photoMode === "lifestyle" ? "product" : "lifestyle";
   const isRtl = lang === "ar";
 
   return (
@@ -92,24 +87,20 @@ export default function Hero({ lang = "en" }: HeroProps) {
           className="belta-hero-photos"
           style={{ display: "flex", flexDirection: "column", gap: "16px" }}
         >
-          {/* Primary: 4/5 with toggle overlay */}
+          {/* Primary: 4/5 */}
           <div
             className="belta-hero-photo-primary"
             style={{
-              position: "relative",
               width: "100%",
               aspectRatio: "4 / 5",
               borderRadius: "var(--radius-lg)",
               overflow: "hidden",
             }}
           >
-            <PhotoZone mode={photoMode} kind="hero" />
-            <div style={{ position: "absolute", top: "14px", insetInlineEnd: "14px" }}>
-              <StyledProductToggle value={photoMode} onChange={setPhotoMode} variant="on-image" />
-            </div>
+            <PhotoZone />
           </div>
 
-          {/* Secondary: 16/9 showing opposite mode */}
+          {/* Secondary: 16/9 */}
           <div
             className="belta-hero-photo-secondary"
             style={{
@@ -119,7 +110,7 @@ export default function Hero({ lang = "en" }: HeroProps) {
               overflow: "hidden",
             }}
           >
-            <PhotoZone mode={secondaryMode} kind="secondary" />
+            <PhotoZone />
           </div>
         </div>
       </div>

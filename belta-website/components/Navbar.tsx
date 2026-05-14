@@ -3,12 +3,11 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Search, User, Heart, ShoppingBag, Menu, X } from "lucide-react";
+import { Search, User, ShoppingBag, Menu, X } from "lucide-react";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
 import SearchPanel from "@/components/SearchPanel";
 import AccountDropdown from "@/components/AccountDropdown";
-import WishlistDropdown from "@/components/WishlistDropdown";
 import CartPanel from "@/components/CartPanel";
 
 const NAV_LINKS = {
@@ -18,7 +17,7 @@ const NAV_LINKS = {
 
 const NAV_HREFS = ["/", "/shop", "/about", "/contact"];
 
-type PanelId = "search" | "account" | "wishlist" | "cart";
+type PanelId = "search" | "account" | "cart";
 
 interface NavbarProps {
   lang?: "en" | "ar";
@@ -91,7 +90,7 @@ export default function Navbar({
     setMobileOpen(false);
   };
 
-  const dropdownOpen = activePanel === "account" || activePanel === "wishlist";
+  const dropdownOpen = activePanel === "account";
 
   const navStyle: React.CSSProperties = {
     position: "sticky",
@@ -109,7 +108,7 @@ export default function Navbar({
 
   return (
     <>
-      {/* Backdrop for account/wishlist dropdowns */}
+      {/* Backdrop for account dropdown */}
       {dropdownOpen && (
         <div
           onClick={closeAll}
@@ -195,14 +194,6 @@ export default function Navbar({
               <User size={18} strokeWidth={1.5} />
             </IconButton>
 
-            <IconButton
-              label={lang === "en" ? "Wishlist" : "المفضلة"}
-              active={activePanel === "wishlist"}
-              onClick={() => toggle("wishlist")}
-            >
-              <Heart size={18} strokeWidth={1.5} />
-            </IconButton>
-
             <div style={{ position: "relative", display: "inline-flex" }}>
               <IconButton
                 label={lang === "en" ? "Cart" : "السلة"}
@@ -222,7 +213,6 @@ export default function Navbar({
               onSignOut={handleSignOut}
               lang={lang}
             />
-            <WishlistDropdown isOpen={activePanel === "wishlist"} lang={lang} />
           </div>
         </div>
 
@@ -275,7 +265,7 @@ export default function Navbar({
             Beltà
           </Link>
 
-          {/* Right: search + cart only */}
+          {/* Right: search + account + cart */}
           <div style={{ display: "flex", alignItems: "center", gap: "4px", flexShrink: 0 }}>
             <IconButton
               label={lang === "en" ? "Search" : "بحث"}
@@ -284,6 +274,22 @@ export default function Navbar({
             >
               <Search size={18} strokeWidth={1.5} />
             </IconButton>
+
+            <div style={{ position: "relative" }}>
+              <IconButton
+                label={lang === "en" ? "Account" : "حسابي"}
+                active={activePanel === "account"}
+                onClick={() => toggle("account")}
+              >
+                <User size={18} strokeWidth={1.5} />
+              </IconButton>
+              <AccountDropdown
+                isOpen={activePanel === "account"}
+                user={user}
+                onSignOut={handleSignOut}
+                lang={lang}
+              />
+            </div>
 
             <div style={{ position: "relative", display: "inline-flex" }}>
               <IconButton
@@ -328,48 +334,71 @@ export default function Navbar({
           position: "fixed",
           top: 0,
           left: 0,
-          width: "280px",
+          width: "min(85vw, 360px)",
           height: "100vh",
           zIndex: 60,
           background: "#EFE7DA",
           transform: mobileOpen ? "translateX(0)" : "translateX(-100%)",
           transition: "transform 280ms var(--ease-out)",
           flexDirection: "column",
-          padding: "48px",
+          padding: "0",
           overflowY: "auto",
           boxShadow: "4px 0 24px rgba(44,24,16,0.12)",
         }}
       >
-        {/* Close button — top-right inside drawer */}
-        <button
-          aria-label="Close menu"
-          onClick={() => setMobileOpen(false)}
-          className="belta-touch"
+        {/* Drawer header: wordmark + close button */}
+        <div
           style={{
-            position: "absolute",
-            top: "12px",
-            right: "12px",
             display: "flex",
             alignItems: "center",
-            justifyContent: "center",
-            background: "none",
-            border: "none",
-            cursor: "pointer",
-            color: "var(--fg)",
-            borderRadius: "var(--radius-md)",
+            justifyContent: "space-between",
+            padding: "20px 20px 20px 24px",
+            borderBottom: "1px solid rgba(44,24,16,0.08)",
           }}
         >
-          <X size={20} strokeWidth={1.5} />
-        </button>
+          <Link
+            href="/"
+            lang="en"
+            onClick={() => setMobileOpen(false)}
+            style={{
+              fontFamily: "var(--font-display)",
+              fontSize: "26px",
+              fontWeight: 500,
+              color: "var(--belta-terracotta)",
+              letterSpacing: "-0.01em",
+              textDecoration: "none",
+              lineHeight: 1,
+            }}
+          >
+            Beltà
+          </Link>
+          <button
+            aria-label="Close menu"
+            onClick={() => setMobileOpen(false)}
+            className="belta-touch"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              color: "var(--fg)",
+              borderRadius: "var(--radius-md)",
+            }}
+          >
+            <X size={20} strokeWidth={1.5} />
+          </button>
+        </div>
 
-        {/* Nav links — centered vertically */}
+        {/* Nav links */}
         <nav
           style={{
             display: "flex",
             flexDirection: "column",
-            gap: "40px",
+            gap: "0",
             flex: 1,
-            justifyContent: "center",
+            padding: "8px 0",
           }}
         >
           {labels.map((label, i) => (
@@ -379,12 +408,14 @@ export default function Navbar({
               onClick={() => setMobileOpen(false)}
               style={{
                 fontFamily: "var(--font-body)",
-                fontSize: "20px",
+                fontSize: "18px",
                 fontWeight: pathname === NAV_HREFS[i] ? 500 : 400,
-                color: pathname === NAV_HREFS[i] ? "var(--brand)" : "#2C1810",
+                color: pathname === NAV_HREFS[i] ? "var(--brand)" : "var(--fg)",
                 textDecoration: "none",
                 letterSpacing: "0.01em",
                 lineHeight: 1,
+                padding: "16px 24px",
+                borderBottom: "1px solid rgba(44,24,16,0.06)",
               }}
             >
               {label}
@@ -392,30 +423,96 @@ export default function Navbar({
           ))}
         </nav>
 
-        {/* Lang toggle — bottom of drawer */}
-        <button
-          onClick={handleLangToggle}
-          aria-label="Toggle language"
+        {/* Account section */}
+        <div
           style={{
-            alignSelf: "flex-start",
-            display: "flex",
-            alignItems: "center",
-            fontFamily: "var(--font-body)",
-            fontSize: "11px",
-            fontWeight: 500,
-            letterSpacing: "0.18em",
-            textTransform: "uppercase",
-            background: "none",
-            border: "none",
-            cursor: "pointer",
-            lineHeight: 1,
-            minHeight: "44px",
+            padding: "16px 24px",
+            borderTop: "1px solid rgba(44,24,16,0.08)",
           }}
         >
-          <span style={{ color: lang === "en" ? "var(--brand)" : "var(--fg-muted)" }}>EN</span>
-          <span style={{ color: "var(--fg-muted)", opacity: 0.5, paddingInline: "6px" }}>|</span>
-          <span style={{ color: lang === "ar" ? "var(--brand)" : "var(--fg-muted)" }}>AR</span>
-        </button>
+          {user ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              <span
+                style={{
+                  fontFamily: "var(--font-body)",
+                  fontSize: "13px",
+                  color: "var(--fg-muted)",
+                  letterSpacing: "0.02em",
+                }}
+              >
+                {user.email}
+              </span>
+              <button
+                onClick={() => { handleSignOut(); setMobileOpen(false); }}
+                style={{
+                  alignSelf: "flex-start",
+                  fontFamily: "var(--font-body)",
+                  fontSize: "13px",
+                  fontWeight: 500,
+                  color: "var(--brand)",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  padding: 0,
+                  letterSpacing: "0.01em",
+                  minHeight: "44px",
+                }}
+              >
+                {lang === "en" ? "Sign out" : "تسجيل الخروج"}
+              </button>
+            </div>
+          ) : (
+            <Link
+              href="/auth/login"
+              onClick={() => setMobileOpen(false)}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                fontFamily: "var(--font-body)",
+                fontSize: "14px",
+                fontWeight: 500,
+                color: "var(--brand)",
+                textDecoration: "none",
+                letterSpacing: "0.01em",
+                minHeight: "44px",
+              }}
+            >
+              {lang === "en" ? "Sign in →" : "← تسجيل الدخول"}
+            </Link>
+          )}
+        </div>
+
+        {/* Lang toggle — bottom of drawer */}
+        <div
+          style={{
+            padding: "16px 24px",
+            borderTop: "1px solid rgba(44,24,16,0.08)",
+          }}
+        >
+          <button
+            onClick={handleLangToggle}
+            aria-label="Toggle language"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              fontFamily: "var(--font-body)",
+              fontSize: "11px",
+              fontWeight: 500,
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              lineHeight: 1,
+              minHeight: "44px",
+              padding: 0,
+            }}
+          >
+            <span style={{ color: lang === "en" ? "var(--brand)" : "var(--fg-muted)" }}>EN</span>
+            <span style={{ color: "var(--fg-muted)", opacity: 0.5, paddingInline: "6px" }}>|</span>
+            <span style={{ color: lang === "ar" ? "var(--brand)" : "var(--fg-muted)" }}>AR</span>
+          </button>
+        </div>
       </div>
 
       {/* Cart slide-over */}

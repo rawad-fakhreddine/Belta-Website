@@ -413,8 +413,6 @@ a:hover {
   .belta-product-card        { overflow: hidden !important; }
   .belta-product-card-image  { aspect-ratio: 3 / 4 !important; }
   .belta-skeleton-card-image { aspect-ratio: 3 / 4 !important; }
-  /* Hide styled/product toggle on mobile — too cramped in 2-col grid */
-  .belta-toggle-card-wrapper { display: none !important; }
   .belta-card-info     { padding: 10px 4px 0 !important; }
   .belta-card-name     { font-size: 15px !important; line-height: 1.3 !important; }
   .belta-card-material { font-size: 11px !important; }

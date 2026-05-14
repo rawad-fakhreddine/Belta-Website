@@ -72,8 +72,35 @@ function LoginForm() {
           borderRadius: "var(--radius-xl)",
           boxShadow: "var(--shadow-lg)",
           padding: "48px 40px",
+          position: "relative",
         }}
       >
+        {/* Close / back to home */}
+        <Link
+          href="/"
+          aria-label="Back to home"
+          style={{
+            position: "absolute",
+            top: "16px",
+            right: "16px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "32px",
+            height: "32px",
+            borderRadius: "var(--radius-md)",
+            color: "var(--fg-muted)",
+            textDecoration: "none",
+            fontSize: "20px",
+            lineHeight: 1,
+            transition: "color 180ms var(--ease-out)",
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = "var(--fg)")}
+          onMouseLeave={(e) => (e.currentTarget.style.color = "var(--fg-muted)")}
+        >
+          ×
+        </Link>
+
         {/* Wordmark */}
         <div style={{ textAlign: "center", marginBottom: "32px" }}>
           <Link

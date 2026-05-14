@@ -11,6 +11,7 @@ type Status = "loading" | "ok" | "error";
 
 function mapRow(row: ProductRow): ProductWithFilter {
   return {
+    id:           row.id,
     name:         row.name,
     material:     row.material,
     price:        row.price,
@@ -22,10 +23,9 @@ function mapRow(row: ProductRow): ProductWithFilter {
 
 interface ProductGridProps {
   lang?: "en" | "ar";
-  onOpenProduct?: (index: number) => void;
 }
 
-export default function ProductGrid({ lang = "en", onOpenProduct }: ProductGridProps) {
+export default function ProductGrid({ lang = "en" }: ProductGridProps) {
   const [products, setProducts] = useState<ProductWithFilter[]>([]);
   const [status, setStatus]     = useState<Status>("loading");
   const [btnHovered, setBtnHovered] = useState(false);
@@ -138,12 +138,11 @@ export default function ProductGrid({ lang = "en", onOpenProduct }: ProductGridP
         <div className="belta-product-grid">
           {status === "loading"
             ? Array.from({ length: 8 }).map((_, i) => <SkeletonCard key={i} />)
-            : products.map((product, i) => (
+            : products.map((product) => (
                 <ProductCard
                   key={product.name}
                   product={product}
                   lang={lang}
-                  onOpen={onOpenProduct ? () => onOpenProduct(i) : undefined}
                 />
               ))}
         </div>
