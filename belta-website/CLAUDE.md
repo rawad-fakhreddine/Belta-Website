@@ -556,28 +556,48 @@ Read these for exact prop shapes, JSX structure, and inline-style values. Feel f
 
 ## 13. Current Project State
 
-Stack: Next.js 14, TypeScript, Tailwind CSS, Supabase
+Stack: Next.js 15.3.3, TypeScript, Tailwind CSS v4, Supabase
 Supabase URL: https://nssihkcwdrqsjbafanna.supabase.co
-Live URL: https://belta-website-sigma.vercel.app
 GitHub: https://github.com/rawad-fakhreddine/Belta-Website
 
-### Deployment
-- Hosted on Vercel, auto-deploys on every git push to main
-- Root directory set to `belta-website`
-- To verify the site is live: fetch https://belta-website-sigma.vercel.app
+### Deployment — Cloudflare Pages
+- **Hosting:** Cloudflare Pages (migrated from Vercel)
+- **GitHub repo:** rawad-fakhreddine/Belta-Website — auto-deploys on every push to `main`
+- **Build command (Cloudflare dashboard):** `npm run pages:build`
+- **Build output dir:** `.vercel/output/static`
+- **Root directory:** `belta-website`
+- **Node version:** 20
+
+### Cloudflare deployment rules
+- Every server-side route (API routes, auth callbacks) needs `export const runtime = 'edge'`
+- Middleware lives in `middleware.ts` (re-exports from `proxy.ts`)
+- `wrangler.toml` configures the Cloudflare Pages project settings
+- Use `npm run deploy` to manually deploy via Wrangler CLI
+
+### Pushing changes
+Every code change must end with:
+```bash
+git add .
+git commit -m "..."
+git push origin main
+```
+Cloudflare Pages picks up the push and auto-deploys.
 
 ### Completed:
 - All frontend components and public pages
 - Full mobile responsive layout (2-col product grid, slide-in drawer from left, stacked footer)
 - Auth pages (login, register) with name, phone, address, city, newsletter opt-in
+- Homepage: hero (no buttons) → 8 product cards → "Shop the collection" button → Instagram feed → footer
 - Admin layout with dark sidebar (Overview, Products, Subscribers, Campaigns)
 - Admin products page (list, add, edit, delete, active toggle)
 - Admin subscribers page
 - Admin campaigns page with Resend email integration
-- API route: POST /api/send-campaign (owner-only, batches of 100)
+- API route: POST /api/send-campaign (owner-only, batches of 100, edge runtime)
+- Auth callback route (edge runtime)
+- middleware.ts protecting /admin routes (re-exports from proxy.ts)
 - Supabase connected with RLS policies
 - Owner role assigned for rawad.fakhreddine2003@gmail.com
-- proxy.ts protecting /admin routes
+- AuthModal: appears after 4s for unauthenticated visitors, dismissable, shows once per device
 
 ### Database tables:
 - `products` — id, name, name_ar, material, material_ar, price, badge, active, created_at
@@ -589,6 +609,9 @@ GitHub: https://github.com/rawad-fakhreddine/Belta-Website
 - Currently sends from: onboarding@resend.dev
 - After custom domain verified: update `from:` in app/api/send-campaign/route.ts
 
+### WhatsApp
+- Footer link: wa.me/96170000000 → replace `96170000000` with actual number in components/Footer.tsx
+
 ### Mobile breakpoints:
 - Mobile: < 768px
 - Tablet: 768px–1024px
@@ -598,20 +621,19 @@ GitHub: https://github.com/rawad-fakhreddine/Belta-Website
 - Navbar: hamburger left → slide-in drawer from left (280px, #EFE7DA bg)
 - Product grid: 2 col mobile, 2 col tablet, 4 col desktop
 - Hero: text first, photo below, secondary photo hidden on mobile, max-h-[380px]
-- Product card: aspect-ratio 3/4, overflow-hidden, toggle 9px on mobile
+- Product card: aspect-ratio 3/4, overflow-hidden, toggle hidden on mobile
 - Footer: single column centered
 - Min touch target: 44×44px (.belta-touch class)
 
 ### Remaining tasks:
-- WhatsApp buttons on product cards (ask + reserve, wa.me links)
+- Add products in Supabase (currently showing fallback data)
+- Custom domain purchase + DNS setup → update Resend sender email after domain verified
+- Replace WhatsApp number in Footer.tsx (wa.me/96170000000)
+- WhatsApp order buttons on product detail page
 - Analytics events table in Supabase + admin analytics page
-- Security hardening + admin credentials change
-- Mobile design polish
-- Custom domain setup + update Resend sender email
 
 ### How to work on this project:
 - Always read this file fully before starting any task
-- Always fetch https://belta-website-sigma.vercel.app to verify live state
 - Every change must end with git add . && git commit -m "..." && git push origin main
 - Never invent new colors, fonts, or shadows — use only tokens defined in sections 1–3
-- Use High effort mode for multi-file tasks
+- All new server-side routes need `export const runtime = 'edge'` for Cloudflare compatibility
