@@ -5,8 +5,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { createSupabaseServerClient } from "@/lib/supabase-server";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 function buildEmailHtml(subject: string, message: string, preview: string): string {
   const messageHtml = message
     .split("\n")
@@ -164,6 +162,8 @@ export async function POST(request: NextRequest) {
     }
 
     const html = buildEmailHtml(subject.trim(), message.trim(), preview?.trim() ?? "");
+
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
     // Send to all subscribers via Resend batch
     const emails = subscribers.map((sub) => ({
