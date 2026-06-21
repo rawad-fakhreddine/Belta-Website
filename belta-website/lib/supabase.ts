@@ -1,24 +1,10 @@
 import { createBrowserClient } from "@supabase/ssr";
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./supabase-config";
 
-// Lazily initialized — defers createBrowserClient until first use so the
-// module can be imported at build time without requiring env vars to be present.
-let _client: ReturnType<typeof createBrowserClient> | undefined;
-
-function getClient() {
-  if (!_client) {
-    _client = createBrowserClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    );
-  }
-  return _client;
-}
-
-export const supabase = new Proxy({} as ReturnType<typeof createBrowserClient>, {
-  get(_, prop) {
-    return (getClient() as any)[prop];
-  },
-});
+// Browser-side singleton — safe to import in any client component ("use client").
+// Credentials come from lib/supabase-config (env var, falling back to the public
+// anon key) so they are always defined at build time and never crash at runtime.
+export const supabase = createBrowserClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ── Database row shapes ────────────────────────────────────────────────────────
 
