@@ -10,12 +10,16 @@ function isAuthenticated(request: NextRequest): boolean {
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  if (!isAuthenticated(request)) {
+  // Never gate the auth pages themselves — prevents redirect loops.
+  if (pathname.startsWith("/auth")) {
+    return NextResponse.next();
+  }
+
+  // Only the admin area requires authentication. The storefront is public.
+  if (pathname.startsWith("/admin") && !isAuthenticated(request)) {
     const loginUrl = new URL("/auth/login", request.url);
-    // Preserve destination for /admin routes so we redirect back after login
-    if (pathname.startsWith("/admin")) {
-      loginUrl.searchParams.set("next", pathname);
-    }
+    // Preserve destination so we redirect back after login.
+    loginUrl.searchParams.set("next", pathname);
     return NextResponse.redirect(loginUrl);
   }
 
@@ -23,7 +27,6 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Protects the homepage and all admin routes.
-  // Remove "/" from matcher when the site opens to the public.
-  matcher: ["/", "/admin/:path*"],
+  // Protect only the admin area. Homepage and storefront are public.
+  matcher: ["/admin/:path*"],
 };

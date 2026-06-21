@@ -76,7 +76,7 @@ function buildEmailHtml(subject: string, message: string, preview: string): stri
               <table cellpadding="0" cellspacing="0" border="0" style="margin-top:32px;">
                 <tr>
                   <td style="background-color:#8B4513;border-radius:8px;">
-                    <a href="https://belta-website-sigma.vercel.app/shop"
+                    <a href="https://belta-website.pages.dev/shop"
                        style="display:inline-block;padding:14px 28px;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:500;color:#F5EFE6;text-decoration:none;letter-spacing:0.01em;line-height:1;">
                       Shop the collection
                     </a>

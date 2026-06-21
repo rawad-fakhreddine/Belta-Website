@@ -17,7 +17,7 @@ export default function ForgotPasswordPage() {
     setLoading(true);
     setError(null);
 
-    const redirectTo = "https://belta-website-sigma.vercel.app/auth/reset-password";
+    const redirectTo = "https://belta-website.pages.dev/auth/reset-password";
 
     const { error: authError } = await supabase.auth.resetPasswordForEmail(email.trim(), {
       redirectTo,
